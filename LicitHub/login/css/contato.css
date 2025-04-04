@@ -1,0 +1,123 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    background-color: #DDF1EE;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.contact-container {
+    display: flex;
+    background: white;
+    padding: 2.5rem;
+    border-radius: 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+    width: 800px;
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+.contact-info {
+    width: 40%;
+    padding-right: 20px;
+}
+
+.contact-form {
+    margin-bottom: 60px; /* Espaço extra antes do footer */
+}
+
+.footer {
+    bottom: 0;
+    width: 100%;
+    background-color: #1BA27A;
+    color: white;
+    text-align: center;
+    padding: 10px;
+    font-size: 12px;
+}
+
+.contact-container h2 {
+    color: #2B2B2B;
+    margin-bottom: 20px;
+    font-size: 24px;
+    font-weight: 800;
+}
+
+.contact-container p {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 10px;
+}
+
+.contact-form input, .contact-form select, .contact-form textarea {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border: 1px solid #A0A0A0;
+    border-radius: 8px;
+    font-size: 16px;
+    background: #F9F9F9;
+    transition: 0.3s;
+    box-sizing: border-box;
+}
+
+.contact-form input:focus, .contact-form select:focus, .contact-form textarea:focus {
+    border-color: #1BA27A;
+    outline: none;
+    box-shadow: 0 0 5px rgba(27, 162, 122, 0.5);
+}
+
+.contact-button {
+    background-color: #1BA27A;
+    color: white;
+    border: none;
+    padding: 12px;
+    width: 100%;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: bold;
+    transition: background 0.3s, transform 0.2s;
+}
+
+.contact-button:hover {
+    background-color: #178a65;
+    transform: scale(1.05);
+}
+
+.contact-button:hover {
+    background-color: #178a65;
+    transform: scale(1.05);
+}
+
+.footer {
+    background-color: #1BA27A;
+    color: white;
+    text-align: center;
+    padding: 10px;
+    width: 100%;
+    position: fixed;
+    bottom: 0;
+    margin-top: 20px; /* Opcional: Adicione um pequeno espaçamento acima do footer */
+    font-size: 12px;
+}
+
+.social-icons {
+    margin-bottom: 5px;
+}
+
+.social-icons a {
+    color: white;
+    margin: 0 5px;
+    font-size: 14px;
+    text-decoration: none;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
