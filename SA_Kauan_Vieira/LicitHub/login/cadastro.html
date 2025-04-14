@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro - LicitHub</title>
+    <link rel="stylesheet" href="css/cadastro.css">
+</head>
+<body>
+    <div class="register-container">
+        <div class="register-left">
+            <h2>Bem-vindo de volta!</h2>
+            <p>Grandes oportunidades nascem de boas escolhas. Faça parte da melhor licitação hoje!</p>
+            <button class="signin-button" onclick="redirectToLogin()">Entrar</button>
+        </div>
+        <div class="register-right">
+            <h2>Crie Sua Conta</h2>
+            <form>
+                <input type="email" placeholder="Email" id="email">  
+                <div class="password-container">
+                    <input type="password" placeholder="Senha" id="password">
+                    <span class="toggle-password" onclick="togglePasswordVisibility('password')"></span>
+                </div>
+                
+                <div class="password-container">
+                    <input type="password" placeholder="Confirmar Senha" id="confirm-password">
+                    <span class="toggle-password" onclick="togglePasswordVisibility('confirm-password')"></span>
+                </div>
+                
+                <button class="register-button" onclick="register()">Criar Conta</button>
+            </form>
+        </div>
+    </div>
+    
+    <script src="js/cadastro.js"></script>
+</body>
+</html>
