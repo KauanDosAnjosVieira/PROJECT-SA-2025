@@ -14,25 +14,26 @@ body {
 .login-container {
     background: white;
     padding: 2.5rem;
-    border-radius: 20px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+    border-radius: 25px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
     text-align: center;
-    width: 400px;
-    animation: fadeIn 0.5s ease-in-out;
+    width: 25rem;
+    animation: fadeIn 0.6s ease-in-out;
 }
 
 .login-container h2 {
-    color: #2B2B2B;
+    color:#1BA27A;
+    ;
     margin-bottom: 20px;
     font-size: 26px;
     font-family: 'Montserrat', sans-serif;
-    font-weight: 800;
+    font-weight: bold;
 }
 
 .login-container input {
     width: 100%;
     padding: 12px;
-    margin: 15px 0 0 0; /* Remove margem horizontal */
+    margin: 15px 0 0 0;
     border: 1px solid #A0A0A0;
     border-radius: 8px;
     font-size: 16px;
@@ -73,6 +74,7 @@ body {
 .forgot-password-text a {
     color: #178a65;
     text-decoration: none;
+    font-weight: 300;
 }
 
 .forgot-password-text a:hover {
@@ -83,6 +85,8 @@ body {
     margin-top: 15px;
     font-size: 14px;
     color: #666;
+    font-weight: 300;
+
 }
 
 .register-text a {
@@ -93,6 +97,8 @@ body {
 
 .register-text a:hover {
     text-decoration: underline;
+    transform: scale(1.05);
+
 }
 
 @keyframes fadeIn {
