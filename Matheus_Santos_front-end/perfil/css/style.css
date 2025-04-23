@@ -1,0 +1,132 @@
+/* Reset */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: black;
+  height: 100vh;
+  display: flex;
+  justify-content: center;  /* centraliza na horizontal */
+  align-items: center;      /* centraliza na vertical */
+  height: 100vh;            /* ocupa toda a altura da tela */
+  margin: 0;
+
+}
+
+.container {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden; /* evita que o conteúdo vaze nos cantos arredondados */
+  width:800px;
+  margin:auto;
+  display: flex;
+  height: 80vh;
+  
+
+}
+
+/* Sidebar */
+.sidebar {
+  
+  width: 250px;
+  background-color: #333;
+  color: white;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-top-left-radius: 12px;
+  border-bottom-left-radius: 12px;
+  
+  
+}
+
+.imagem-usuario img {
+  position: relative;
+  left:60px;
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 2px solid #ccc;
+  margin-bottom: 20px;
+}
+
+.menu {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.menu button {
+  padding: 10px;
+  border: none;
+  background-color: #444;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.menu button:hover {
+  background-color: #555;
+}
+
+/* Conteúdo */
+.conteudo {
+  flex: 1;
+  background: white;
+  padding: 40px;
+  overflow-y: auto;
+  border-top-right-radius: 12px;
+  border-bottom-right-radius: 12px;
+
+}
+
+.conteudo h2 {
+  margin-bottom: 20px;
+}
+
+.conteudo label {
+  display: block;
+  margin: 10px 0 5px;
+  font-weight: bold;
+}
+
+.conteudo input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.imagem-usuario input[type="file"] {
+  margin-top: 10px;
+  color: white;
+}
+
+.botao-upload {
+  position:relative;
+  left:35px;
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #444;
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s;
+  font-size: 14px;
+  text-align: center;
+  margin-top: 20px; /* espaço acima do botão */
+  margin-bottom: 20px; /* espaço abaixo do botão */
+}
+
+.botao-upload:hover {
+  background-color: #666;
+}
