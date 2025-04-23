@@ -23,6 +23,8 @@ body {
   border-radius: 20px;
   overflow: hidden;
   box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+  animation: fadeIn 0.5s ease-in-out;
+
 }
 
 .login-panel {
@@ -102,9 +104,15 @@ input:focus {
   margin-top: 15px;
 }
 
-    .image-panel {
-        width: 30%;
-      }
+.image-panel {
+  width: 50%;
+  background-image: url('../icons/fundao3.png'); /* substitua pelo caminho real da imagem */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
 
-/* Group 4 */
-
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
