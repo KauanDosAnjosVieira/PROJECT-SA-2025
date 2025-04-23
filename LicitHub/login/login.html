@@ -1,23 +1,30 @@
-<!-- index.html -->
 <!DOCTYPE html>
-<html lang="pt">
+<html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - LicitHub</title>
-    <link rel="stylesheet" href="css/login.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="css/login.css" />
+  <title>Login</title>
 </head>
 <body>
-    <div class="login-container">
-        <h2>Bem-vindo de volta!</h2>
-        <form>
-            <input type="text" placeholder="Usuário" id="user">
-            <input type="password" placeholder="Senha" id="password">
-            <button class="login-button" onclick="login()">Entrar</button>
-            <p class="forgot-password-text"><a href="forgotpassword.html">Esqueceu a senha?</a></p>
-        </form>
-        <p class="register-text">Não tem uma conta? <a href="cadastro.html">Cadastre-se</a></p>
+  <div class="container">
+    <div class="login-panel">
+      <h2>Faça seu login</h2>
+      <form>
+        <label for="email">Email</label>
+        <input type="email" id="email" placeholder="Digite seu email" />
+
+        <label for="senha">Senha</label>
+        <input type="password" id="senha" placeholder="Digite sua senha" />
+
+        <a href="#" class="forgot">Esqueci minha senha</a>
+        <button class="login-btn">Entrar</button>
+      </form>
+      <p class="register">Ainda não tenho uma conta</p>
     </div>
-    <script src="js/login.js"></script>
+    <div class="image-panel">
+        <img src="icons/fundoo.png" alt="Imagem de Fundo" />
+    </div>
+  </div>
 </body>
 </html>
