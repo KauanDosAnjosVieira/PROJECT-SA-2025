@@ -1,4 +1,5 @@
 /* Reset */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
 
 * {
   margin: 0;
@@ -7,126 +8,163 @@
 }
 
 body {
-  font-family: Arial, sans-serif;
-  background-color: black;
-  height: 100vh;
-  display: flex;
-  justify-content: center;  /* centraliza na horizontal */
-  align-items: center;      /* centraliza na vertical */
-  height: 100vh;            /* ocupa toda a altura da tela */
-  margin: 0;
-
-}
-
-.container {
-  background: white;
-  border-radius: 12px;
-  overflow: hidden; /* evita que o conteúdo vaze nos cantos arredondados */
-  width:800px;
-  margin:auto;
-  display: flex;
-  height: 80vh;
-  
-
+  font-family: 'Montserrat', sans-serif;
 }
 
 /* Sidebar */
 .sidebar {
-  
-  width: 250px;
-  background-color: #333;
+  background-color: #1f1f1f; /* Cor de fundo da sidebar */
   color: white;
-  padding: 20px;
+  width: 250px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  border-top-left-radius: 12px;
-  border-bottom-left-radius: 12px;
-  
-  
+  border-top-left-radius: 20px;
+  border-bottom-left-radius: 20px;
 }
 
+/* Foto do usuário */
 .imagem-usuario img {
-  position: relative;
-  left:60px;
   width: 100px;
   height: 100px;
   object-fit: cover;
   border-radius: 50%;
   border: 2px solid #ccc;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
 
-.menu {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.menu button {
-  padding: 10px;
-  border: none;
-  background-color: #444;
-  color: white;
-  border-radius: 5px;
+/* Botão de upload de imagem */
+.imagem-usuario label {
+  display: inline-block;
+  padding: 10px 20px;
+  background: linear-gradient(90deg, #f8f9fa); /* Cor do botão */
+  color: #212529;
+  border-radius: 10px;
   cursor: pointer;
-  transition: background 0.3s;
+  font-size: 14px;
+  font-weight: bold;
+  text-align: center;
+  border: none;
+  transition: transform 0.2s;
+  margin-top: 10px;
 }
 
-.menu button:hover {
-  background-color: #555;
+.imagem-usuario label:hover{
+  transform: scale(1.05);
+}
+
+.usuario {
+  position: relative;
+  top: -40px; /* sobe 20 pixels */
+}
+
+
+
+/* Botão voltar ao início */
+.btn-light {
+  background-color: #f8f9fa;
+  color: #212529;
+  font-weight: bold;
+  border-radius: 10px;
+  padding: 10px;
+  text-align: center;
+}
+
+.btn-light:hover {
+  background-color: #e2e6ea;
+  transform: scale(1.05);
 }
 
 /* Conteúdo */
 .conteudo {
   flex: 1;
-  background: white;
+  background: #111111; /* Cor de fundo do conteúdo */
+  color: white;
   padding: 40px;
-  overflow-y: auto;
-  border-top-right-radius: 12px;
-  border-bottom-right-radius: 12px;
-
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
 }
 
-.conteudo h2 {
-  margin-bottom: 20px;
+h2 {
+  color: white; /* Cor dourada */
+  font-size: 28px;
 }
 
-.conteudo label {
-  display: block;
-  margin: 10px 0 5px;
+/* Inputs */
+.form-control {
+  background-color: #1f1f1f; /* Cor de fundo do input */
+  border-radius: 10px;
+  color: white;
+  border: none;
+  font-size: 15px;
+  padding: 12px;
+  box-shadow: inset 0 0 5px rgba(255, 255, 255, 0.1);
+}
+
+.form-control:focus {
+  outline: none;
+  box-shadow: 0 0 8px rgba(155, 89, 182, 0.6); /* Efeito de foco com cor roxa */
+}
+
+/* Botões */
+.btn-gradient {
+  background-color: #f8f9fa;
+  color: #212529;
+  font-weight: bold;
+  border-radius: 10px;
+  padding: 10px;
+  text-align: center;
+  transition: all 0.2s ease-in-out;
+}
+
+.btn-gradient:hover {
+  background-color: #e2e6ea;
+  transform: scale(1.05);
+}
+
+
+.menu button {
+  padding: 10px;
+  border: none;
+  background-color: #292929;
+  color: white;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: transform 0.2s;
   font-weight: bold;
 }
 
-.conteudo input {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
+.menu button:hover {
+  transform: scale(1.05);
+  background-color: #383838;
 }
 
-.imagem-usuario input[type="file"] {
-  margin-top: 10px;
+/* Responsividade */
+@media (max-width: 768px) {
+  .container-fluid {
+    flex-direction: column;
+  }
+  .conteudo {
+    padding: 20px;
+  }
+}
+
+/* Container das Informações do Usuário com rolagem */
+.informacoes-usuario {
+  max-height: 400px; /* Define a altura máxima para a área de informações */
+  overflow-y: auto;  /* Permite rolagem vertical quando o conteúdo excede a altura */
+  padding-right: 10px; /* Evita que a rolagem fique colada nas bordas */
+}
+
+/* Estilo dos campos de entrada */
+.form-control {
+  background-color: #1f1f1f;
+  border-radius: 10px;
   color: white;
+  border: none;
+  font-size: 15px;
+  padding: 12px;
+  box-shadow: inset 0 0 5px rgba(255, 255, 255, 0.1);
 }
 
-.botao-upload {
-  position:relative;
-  left:35px;
-  display: inline-block;
-  padding: 10px 20px;
-  background-color: #444;
-  color: white;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background 0.3s;
-  font-size: 14px;
-  text-align: center;
-  margin-top: 20px; /* espaço acima do botão */
-  margin-bottom: 20px; /* espaço abaixo do botão */
-}
 
-.botao-upload:hover {
-  background-color: #666;
-}
