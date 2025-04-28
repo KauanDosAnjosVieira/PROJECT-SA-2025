@@ -15,19 +15,19 @@
         </div>
         <div class="register-right">
             <h2>Crie Sua Conta</h2>
-            <form>
-                <input type="email" placeholder="Email" id="email">  
+            <form method="POST" action="cadastro.php">
+                <input type="email" placeholder="Email" name="email" id="email" required>  
                 <div class="password-container">
-                    <input type="password" placeholder="Senha" id="password">
+                    <input type="password" placeholder="Senha" name="senha" id="password" required>
                     <span class="toggle-password" onclick="togglePasswordVisibility('password')"></span>
                 </div>
                 
                 <div class="password-container">
-                    <input type="password" placeholder="Confirmar Senha" id="confirm-password">
+                    <input type="password" placeholder="Confirmar Senha" id="confirm-password" required>
                     <span class="toggle-password" onclick="togglePasswordVisibility('confirm-password')"></span>
                 </div>
                 
-                <button class="register-button" onclick="register()">Criar Conta</button>
+                <button class="register-button" type="submit">Criar Conta</button>
             </form>
         </div>
     </div>

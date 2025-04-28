@@ -20,3 +20,22 @@ function togglePasswordVisibility(fieldId) {
     passwordField.type = isPassword ? "text" : "password";
     toggleIcon.classList.toggle('show', !isPassword); // Alterna a classe para mudar o ícone
 }
+
+function togglePasswordVisibility(id) {
+    const input = document.getElementById(id);
+    if (input.type === "password") {
+        input.type = "text";
+    } else {
+        input.type = "password";
+    }
+}
+
+function register() {
+    const password = document.getElementById('password').value;
+    const confirmPassword = document.getElementById('confirm-password').value;
+
+    if (password !== confirmPassword) {
+        alert('As senhas não coincidem!');
+        event.preventDefault(); // Impede envio
+    }
+}
