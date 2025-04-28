@@ -15,7 +15,7 @@
         </div>
         <div class="register-right">
             <h2>Crie Sua Conta</h2>
-            <form>
+            <form onsubmit="register(event)">
                 <input type="email" placeholder="Email" id="email">  
                 <div class="password-container">
                     <input type="password" placeholder="Senha" id="password">
@@ -27,11 +27,12 @@
                     <span class="toggle-password" onclick="togglePasswordVisibility('confirm-password')"></span>
                 </div>
                 
-                <button class="register-button" onclick="register()">Criar Conta</button>
+                <button type="submit" class="register-button">Criar Conta</button>
             </form>
+            
         </div>
     </div>
     
-    <script src="js/cadastro.js"></script>
+    <script src="js/cadastro.js" defer></script>
 </body>
 </html>
