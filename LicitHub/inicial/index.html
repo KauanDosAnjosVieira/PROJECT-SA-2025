@@ -28,10 +28,10 @@
           <li><a href="#contato">Contato</a></li>
         </ul>
       </nav>
-      <div class="auth-buttons">
-        <a href="../login/login.html" class="btn btn-outline">Entrar</a>
-        <a href="../login/cadastro.html" class="btn btn-primary">Cadastrar</a>
+      <div class="auth-buttons" id="auth-status">
+        <!-- Vai ser preenchido dinamicamente pelo JavaScript -->
       </div>
+      
       <div class="mobile-menu-btn">
         <span></span>
         <span></span>
@@ -349,7 +349,8 @@
       <div class="cta-content">
         <h2>Pronto para transformar sua participação em licitações?</h2>
         <p>Junte-se a centenas de empresas que já estão usando o LicitHub para aumentar suas chances de sucesso.</p>
-        <a href="#planos" class="btn btn-primary btn-lg animated-link">Comece agora mesmo</a>
+        <a id="btn-comece-agora" class="btn btn-primary btn-lg animated-link" href="#cadastro">Comece agora mesmo</a>
+
       </div>
     </div>
   </section>
@@ -409,6 +410,6 @@
     </div>
   </footer>
 
-  <script src="js/script.js"></script>
+  <script src="js/script.js" defer></script>
 </body>
 </html>
