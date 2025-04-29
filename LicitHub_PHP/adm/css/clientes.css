@@ -1,0 +1,21 @@
+body { background-color: #f4f6f9; }
+.sidebar { height: 100vh; background-color: #2e3b4e; color: white; padding: 20px;
+}
+.sidebar a {
+  color: white;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  margin: 10px 0;
+}
+.sidebar a i {
+  margin-right: 10px;
+}
+
+.sidebar {
+    display: flex;
+    flex-direction: column;
+  }
+.content { padding: 30px; }
+.card { border: none; border-radius: 12px; }
+.status-badge { font-size: 0.85rem; padding: 5px 10px; border-radius: 20px; }
