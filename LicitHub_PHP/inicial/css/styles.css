@@ -156,7 +156,7 @@
   }
   
   .logo img {
-    height: 40px;
+    height: 80px;
   }
   
   .main-nav {
@@ -194,6 +194,10 @@
   .nav-links a:hover::after,
   .nav-links a.active::after {
     width: 100%;
+  }
+  
+  .nav-links a.active {
+    text-decoration: underline;
   }
   
   .nav-links a.active {
@@ -798,7 +802,7 @@
   }
   
   .footer-logo img {
-    height: 40px;
+    height: 55px;
   }
   
   .footer-col p {

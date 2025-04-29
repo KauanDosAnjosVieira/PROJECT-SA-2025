@@ -172,6 +172,25 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
+// Active menu item on scroll
+const sections = document.querySelectorAll('section[id]');
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(section => {
+    const sectionTop = section.offsetTop - 100;
+    const sectionHeight = section.offsetHeight;
+    if (window.scrollY >= sectionTop && window.scrollY < sectionTop + sectionHeight) {
+      current = section.getAttribute('id');
+    }
+  });
+
+  document.querySelectorAll('.nav-links a').forEach(item => {
+    item.classList.remove('active');
+    if (item.getAttribute('href') === `#${current}`) {
+      item.classList.add('active');
+    }
+  });
+});
 
 
 
