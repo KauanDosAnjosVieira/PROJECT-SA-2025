@@ -1,0 +1,53 @@
+/* Estilos personalizados para o site */
+body {
+    font-family: 'Montserrat', sans-serif;
+    background-color: #f8f9fa;
+  }
+  
+  header {
+    background-color: #003d6e;
+  }
+  
+  footer {
+    background-color: #212529;
+  }
+  
+  h1, h2, h3, h4 {
+    color: #003d6e;
+  }
+  
+  .btn-primary {
+    background-color: #003d6e;
+  }
+  
+  .btn-primary:hover {
+    background-color: #1366ba;
+  }
+  
+  .card {
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .card p {
+    color: #555;
+  }
+  
+  .form-label {
+    font-weight: 600;
+  }
+  
+  .form-control:focus {
+    border-color: #003d6e;
+    box-shadow: 0 0 4px rgba(0, 61, 110, 0.5);
+  }
+  
+  a.logo-link {
+    color: #003d6e; /* sua cor principal */
+    font-weight: bold;
+    text-decoration: none;
+  }
+  a.logo-link:hover {
+    color: #1366ba; /* cor ao passar o mouse */
+  }
+  
