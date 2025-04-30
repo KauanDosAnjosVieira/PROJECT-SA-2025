@@ -50,4 +50,20 @@ body {
   a.logo-link:hover {
     color: #1366ba; /* cor ao passar o mouse */
   }
+
+  .logo {
+    width: 130px;
+    height: auto;
+    position: absolute;
+    left: 50%;
+    top: -23px;
+    transform: translateX(-50%);
+  }
+  
+  @media (max-width: 768px) {
+    .logo {
+      width: 100px;
+      top: -15px;
+    }
+  }
   
