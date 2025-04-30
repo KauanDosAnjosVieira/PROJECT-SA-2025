@@ -1025,3 +1025,41 @@
     }
   }
   
+  /* Licitações Exclusivas */
+.licitacoes {
+  padding: 100px 0;
+  background-color: var(--light-gray);
+}
+
+.licitacoes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 30px;
+}
+
+.licitacao-card {
+  background-color: var(--white);
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: var(--shadow);
+  transition: var(--transition);
+  text-align: center;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.licitacao-card:hover {
+  transform: translateY(-10px);
+  box-shadow: var(--shadow-lg);
+}
+
+.licitacao-card h3 {
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--primary-dark);
+  margin-bottom: 15px;
+}
+
+.licitacao-card p {
+  font-size: 16px;
+  color: var(--gray);
+}

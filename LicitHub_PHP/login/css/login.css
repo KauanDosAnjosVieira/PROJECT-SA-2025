@@ -116,3 +116,19 @@ input:focus {
   from { opacity: 0; transform: translateY(-10px); }
   to { opacity: 1; transform: translateY(0); }
 }
+
+.toggle-password {
+    position: absolute;
+    right: 10px;
+    top: 60%;
+    transform: translateY(-50%);
+    width: 15px;
+    height: 15px;
+    background-image: url('../icons/eye-close-up.png');
+    background-size: cover;
+    cursor: pointer;
+}
+
+.toggle-password.show {
+    background-image: url('../icons/eye.png');
+}
