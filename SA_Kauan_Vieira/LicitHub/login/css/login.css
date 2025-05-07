@@ -1,0 +1,101 @@
+/* styles.css */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    background-color: #DDF1EE;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.login-container {
+    background: white;
+    padding: 2.5rem;
+    border-radius: 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+    text-align: center;
+    width: 400px;
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+.login-container h2 {
+    color: #2B2B2B;
+    margin-bottom: 20px;
+    font-size: 26px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800;
+}
+
+.login-container input {
+    width: 100%;
+    padding: 12px;
+    margin: 15px 0 0 0; /* Remove margem horizontal */
+    border: 1px solid #A0A0A0;
+    border-radius: 8px;
+    font-size: 16px;
+    box-sizing: border-box; /* Inclui padding e borda no cálculo da largura */
+}
+
+.login-container input:focus {
+    border-color: #1BA27A;
+    outline: none;
+    box-shadow: 0 0 5px rgba(27, 162, 122, 0.5);
+}
+
+.login-button {
+    background-color: #1BA27A;
+    color: white;
+    border: none;
+    padding: 12px;
+    margin: 20px 0 0 0;
+    width: 100%;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: bold;
+    transition: background 0.3s, transform 0.2s;
+}
+
+.login-button:hover {
+    background-color: #178a65;
+    transform: scale(1.05);
+}
+
+.forgot-password-text {
+    text-align: center;
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+.forgot-password-text a {
+    color: #178a65;
+    text-decoration: none;
+}
+
+.forgot-password-text a:hover {
+    text-decoration: underline;
+}
+
+.register-text {
+    margin-top: 15px;
+    font-size: 14px;
+    color: #666;
+}
+
+.register-text a {
+    color: #1BA27A;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.register-text a:hover {
+    text-decoration: underline;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}

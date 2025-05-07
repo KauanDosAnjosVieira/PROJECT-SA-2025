@@ -18,20 +18,21 @@
             <form>
                 <input type="email" placeholder="Email" id="email">  
                 <div class="password-container">
-                    <input type="password" placeholder="Senha" id="password">
+                    <input type="password" placeholder="Senha" name="senha" id="password" required>
                     <span class="toggle-password" onclick="togglePasswordVisibility('password')"></span>
                 </div>
                 
                 <div class="password-container">
-                    <input type="password" placeholder="Confirmar Senha" id="confirm-password">
+                    <input type="password" placeholder="Confirmar Senha" id="confirm-password" required>
                     <span class="toggle-password" onclick="togglePasswordVisibility('confirm-password')"></span>
                 </div>
                 
                 <button class="register-button" onclick="register()">Criar Conta</button>
             </form>
+            
         </div>
     </div>
     
-    <script src="js/cadastro.js"></script>
+    <script src="js/cadastro.js" defer></script>
 </body>
 </html>

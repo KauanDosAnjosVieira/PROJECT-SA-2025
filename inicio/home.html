@@ -1,109 +1,158 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LicitaHub - Soluções em Licitações</title>
-    <link rel="stylesheet" type="text/css" href="css/home.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login</title>
+
+  <!-- Estilos adicionais -->
+  <link rel="stylesheet" href="css/login.css" />
+  <script src="js/login.js" defer></script>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f7fa;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 80%;
+      max-width: 1200px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      background-color: white;
+      border-radius: 8px;
+    }
+
+    .login-panel {
+      padding: 40px;
+      width: 50%;
+    }
+
+    h2 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 30px;
+    }
+
+    .login-panel form {
+      display: flex;
+      flex-direction: column;
+    }
+
+    label {
+      margin-bottom: 5px;
+      font-weight: bold;
+      color: #333;
+    }
+
+    input[type="email"],
+    input[type="password"] {
+      padding: 10px;
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+
+    .forgot {
+      color: #007bff;
+      text-align: right;
+      font-size: 14px;
+      margin-bottom: 20px;
+      text-decoration: none;
+    }
+
+    .forgot:hover {
+      text-decoration: underline;
+    }
+
+    .login-btn {
+      background-color: #007bff;
+      color: white;
+      padding: 12px;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .login-btn:hover {
+      background-color: #0056b3;
+    }
+
+    .register {
+      display: block;
+      text-align: center;
+      margin-top: 20px;
+      color: #333;
+      font-size: 14px;
+      text-decoration: none;
+    }
+
+    .register:hover {
+      text-decoration: underline;
+    }
+
+    .image-panel {
+      background-image: url('images/login-background.jpg'); /* Sua imagem de fundo */
+      background-size: cover;
+      width: 50%;
+      height: 100%;
+      border-top-right-radius: 8px;
+      border-bottom-right-radius: 8px;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      font-size: 18px;
+      background: none;
+      border: none;
+      color: #ff0000;
+      cursor: pointer;
+    }
+  </style>
 </head>
 <body>
-    <!-- Header -->
-    <header>
-        <div class="header-container">
-            <div class="logo">
-                logo
-            </div>
-            <nav>
-                <ul>
-                    <li><a href="#">Início</a></li>
-                    <li><a href="#">Soluções</a></li>
-                    <li><a href="#">Planos</a></li>
-                    <li><a href="#">Blog</a></li>
-                    <li><a href="#">Contato</a></li>
-                    <li><a href="#" class="btn-primary">Acessar Plataforma</a></li>
-                </ul>
-            </nav>
-        </div>
-    </header>
+  <div class="container">
+    <!-- Fechar aba -->
+    <button class="close-btn" onclick="window.close();">X</button>
 
-    <!-- Hero Section -->
-    <section class="hero">
-        <h1>Soluções completas para licitações</h1>
-        <p>Tenha acesso às melhores ferramentas para participar de licitações e aumentar suas chances de ganhar contratos públicos.</p>
-        <a href="#" class="btn-primary" style="padding: 15px 30px; font-size: 18px;">Experimente Grátis</a>
-    </section>
+    <div class="login-panel">
+      <h2>Faça seu login</h2>
+      <form method="POST" action="login.php" onsubmit="login(event)">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" placeholder="Digite seu email" required />
 
-    <!-- Serviços -->
-    <section class="servicos">
-        <h2>Nossas Soluções</h2>
-        <div class="servicos-grid">
-            <div class="servico-card">
-                <h3>Busca Inteligente</h3>
-                <p>Encontre licitações que combinam com seu negócio usando nossos filtros avançados e alertas personalizados.</p>
-            </div>
-            <div class="servico-card">
-                <h3>Análise de Editais</h3>
-                <p>Entenda os editais rapidamente com nossos resumos automáticos e análises de risco.</p>
-            </div>
-            <div class="servico-card">
-                <h3>Gestão de Licitações</h3>
-                <p>Organize todo o processo de participação em licitações em um único lugar.</p>
-            </div>
-        </div>
-    </section>
+        <label for="senha">Senha</label>
+        <input type="password" id="senha" name="senha" placeholder="Digite sua senha" required />
 
-    <!-- Planos -->
-    
-    <section class="planos">
-        <h2>Escolha o Plano Que Mais Se Adequa a Você!</h2>
-        <div class="planos-grid">
-            <div class="planos-card">
-                <h3>Plano Básico</h3>
-                <p>Organize todo o processo de participação em licitações em um único lugar.</p>
-            </div>
-            <div class="planos-card2">
-                <h3>Plano LicitHub</h3>
-                <p>Organize todo o processo de participação em licitações em um único lugar.</p>
-                <br>
-                <h3 style="font-size: 36px;">R$10/mês</h3>
-                <div>
-                <a href="#" class="btn-card2" style="font-size: 20px;">Quero Esse !</a>
-                </div>
-            </div>
-            <div class="planos-card">
-                <h3>Plano Pregão</h3>
-                <p>Organize todo o processo de participação em licitações em um único lugar.</p>
-            </div>  
-        </div>
-    </section>
-    
-    <!-- Footer -->
-    <footer>
-        <div class="footer-container">
-            <div class="footer-col">
-                <h3>LicitaHub</h3>
-                <p>Soluções inteligentes para licitações que ajudam empresas a ganharem mais contratos públicos.</p>
-            </div>
-            <div class="footer-col">
-                <h3>Links Rápidos</h3>
-                <ul>
-                    <li><a href="#">Sobre Nós</a></li>
-                    <li><a href="#">Planos</a></li>
-                    <li><a href="#">Blog</a></li>
-                    <li><a href="#">Contato</a></li>
-                </ul>
-            </div>
-            <div class="footer-col">
-                <h3>Contato</h3>
-                <ul>
-                    <li>Email: contato@licitaHub.com.br</li>
-                    <li>Telefone: (XX) XXXX-XXXX</li>
-                </ul>
-            </div>
-        </div>
-        <div class="copyright">
-            <p>&copy; 2023 LicitaHub. Todos os direitos reservados.</p>
-        </div>
-    </footer>
+        <a href="forgotpassword.php" class="forgot">Esqueci minha senha</a>
+        <button type="submit" class="login-btn">Entrar</button>
+      </form>
+      <a href="cadastro.php" class="register">Ainda não tenho uma conta</a>
+    </div>
+
+    <div class="image-panel">
+    </div>
+  </div>
+
+  <script>
+    // Função para fechar a aba
+    function closeTab() {
+      window.close();
+    }
+  </script>
 </body>
 </html>
