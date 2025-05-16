@@ -1,69 +1,79 @@
 <?php
 session_start();
+require_once '../conexao.php';
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Conexão com o banco
-    $conn = new mysqli('localhost', 'root', '', 'licithub');
+// Função para exibir alerta e redirecionar
+function showAlertAndRedirect($message, $isError = true, $redirectTo = 'cadastro.php') {
+    echo "<script>
+        alert('" . addslashes($message) . "');
+        window.location.href = '" . $redirectTo . "';
+    </script>";
+    exit();
+}
 
-    if ($conn->connect_error) {
-        die("Conexão falhou: " . $conn->connect_error);
-    }
-
-    // Recebe e sanitiza dados
-    $name = filter_var($_POST['name'], FILTER_SANITIZE_STRING);
-    $email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
-    $password = $_POST['password'];
-    $confirmPassword = $_POST['confirm_password'];
-    $user_type = 'customer'; // Valor padrão para novos cadastros
-
-    // Verificar se as senhas são iguais
-    if ($password !== $confirmPassword) {
-        echo "<script>alert('As senhas não coincidem.'); window.history.back();</script>";
-        exit();
-    }
-
-    // Verificar se o email já existe
-    $check_email = $conn->prepare("SELECT id FROM users WHERE email = ?");
-    $check_email->bind_param("s", $email);
-    $check_email->execute();
-    $check_email->store_result();
+try {
+    $pdo = getConexao();
     
-    if ($check_email->num_rows > 0) {
-        echo "<script>alert('Este email já está cadastrado.'); window.history.back();</script>";
-        exit();
-    }
-    $check_email->close();
-
-    // Criptografar a senha
-    $passwordHash = password_hash($password, PASSWORD_DEFAULT);
-
-    // Inserir no banco
-    $sql = "INSERT INTO users (name, email, password, user_type, created_at, updated_at) 
-            VALUES (?, ?, ?, ?, NOW(), NOW())";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("ssss", $name, $email, $passwordHash, $user_type);
-
-    if ($stmt->execute()) {
-        // Opcional: atribuir um role padrão (se necessário)
-        $user_id = $stmt->insert_id;
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $nome = trim($_POST['nome']);
+        $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
+        $senha = $_POST['senha'];
+        $confirmarSenha = $_POST['confirmarSenha'];
         
-        // Buscar o role padrão 'customer' (você precisa ter isso na tabela roles)
-        $role_query = $conn->query("SELECT id FROM roles WHERE name = 'customer' LIMIT 1");
-        if ($role_query->num_rows > 0) {
-            $role = $role_query->fetch_assoc();
-            $conn->query("INSERT INTO user_roles (user_id, role_id, created_at) 
-                         VALUES ($user_id, {$role['id']}, NOW())");
+        $errors = [];
+        
+        // Validações
+        if (empty($nome)) {
+            $errors[] = "Por favor, insira seu nome completo.";
         }
         
-        echo "<script>alert('Cadastro realizado com sucesso!'); window.location.href='login.php';</script>";
-    } else {
-        echo "<script>alert('Erro ao cadastrar: " . $conn->error . "'); window.history.back();</script>";
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $errors[] = "Por favor, insira um e-mail válido.";
+        }
+        
+        if (strlen($senha) < 8) {
+            $errors[] = "A senha deve ter pelo menos 8 caracteres.";
+        }
+        
+        if ($senha !== $confirmarSenha) {
+            $errors[] = "As senhas não coincidem.";
+        }
+        
+        // Verificar se email já existe
+        $stmt = $pdo->prepare("SELECT id FROM users WHERE email = ?");
+        $stmt->execute([$email]);
+        
+        if ($stmt->rowCount() > 0) {
+            $errors[] = "Este e-mail já está cadastrado.";
+        }
+        
+        if (!empty($errors)) {
+            showAlertAndRedirect(implode("\n", $errors));
+        }
+        
+        // Cadastrar usuário
+        $senhaHash = password_hash($senha, PASSWORD_DEFAULT);
+        
+        $stmt = $pdo->prepare("INSERT INTO users (name, email, password, user_type, created_at, updated_at) 
+                              VALUES (?, ?, ?, 'customer', NOW(), NOW())");
+        $stmt->execute([$nome, $email, $senhaHash]);
+        
+        // Buscar dados do usuário recém-criado
+        $stmt = $pdo->prepare("SELECT * FROM users WHERE email = ?");
+        $stmt->execute([$email]);
+        $user = $stmt->fetch();
+        
+        // Criar sessão
+        $_SESSION['user_id'] = $user['id'];
+        $_SESSION['user_name'] = $user['name'];
+        $_SESSION['user_email'] = $user['email'];
+        $_SESSION['user_type'] = $user['user_type'];
+        
+        showAlertAndRedirect("Cadastro realizado com sucesso!", false, 'dashboard.php');
     }
 
-    $stmt->close();
-    $conn->close();
-}
-?>
+    // Se não for POST, exibe o formulário
+    ?>
 
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -83,6 +93,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="register-right">
             <h2>Crie Sua Conta</h2>
             <form id="register-form" method="POST" action="cadastro.php">
+                <input type="text" placeholder="Nome Completo" name="nome" id="nome" required>
                 <input type="email" placeholder="Email" name="email" id="email" required>  
                 <div class="password-container">
                     <input type="password" placeholder="Senha" name="senha" id="password" required>
@@ -103,3 +114,30 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <script src="js/cadastro.js"></script> <!-- Certifique-se de que este arquivo exista e esteja correto -->
 </body>
 </html>
+
+   
+
+        <script>
+            function togglePassword(fieldId) {
+                const field = document.getElementById(fieldId);
+                const icon = field.nextElementSibling;
+                
+                if (field.type === 'password') {
+                    field.type = 'text';
+                    icon.classList.remove('bi-eye');
+                    icon.classList.add('bi-eye-slash');
+                } else {
+                    field.type = 'password';
+                    icon.classList.remove('bi-eye-slash');
+                    icon.classList.add('bi-eye');
+                }
+            }
+        </script>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    </body>
+    </html>
+    <?php
+} catch (PDOException $e) {
+    showAlertAndRedirect("Ocorreu um erro no cadastro. Por favor, tente novamente mais tarde.");
+}
+?>

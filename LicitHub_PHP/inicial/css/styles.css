@@ -1063,3 +1063,21 @@
   font-size: 16px;
   color: var(--gray);
 }
+
+/* Adicione ao seu arquivo CSS */
+
+.auth-buttons {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.btn-primary.dashboard-btn {
+  background-color: #4a00e0;
+  border-color: #4a00e0;
+}
+
+.btn-primary.dashboard-btn:hover {
+  background-color: #3a00b0;
+  border-color: #3a00b0;
+}
