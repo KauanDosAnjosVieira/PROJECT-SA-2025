@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Painel de Licitações</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+  <div class="container-fluid">
+    <div class="row full-height">
+      <div class="col-md-2 sidebar">
+        <h4>LicitHub</h4>
+        <a href="dashboard.html"><i class="bi bi-speedometer2"></i>Painel</a>
+        <a href="clientes.html"><i class="bi bi-people"></i>Clientes</a>
+        <a href="planos.html"><i class="bi bi-card-list"></i>Planos</a>
+        <a href="contatos.html"><i class="bi bi-envelope"></i>Contatos</a>
+        <a href="config.html"><i class="bi bi-gear"></i>Configurações</a>
+      </div>
+
+      <div class="col-md-10 content">
+        <div class="row mb-4">
+          <div class="col-md-3">
+            <div class="card bg-light text-dark p-3">
+              <h6>Clientes</h6>
+              <h3>3.200</h3>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="card bg-light text-dark p-3">
+              <h6>Planos Fechados</h6>
+              <h3>850</h3>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="card bg-light text-dark p-3">
+              <h6>Contatos Recebidos</h6>
+              <h3>1.150</h3>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="card bg-light text-dark p-3">
+              <h6>Faturamento</h6>
+              <h3>R$ 540.000</h3>
+            </div>
+          </div>
+        </div>
+
+        <div class="card mb-4">
+          <div class="card-body">
+            <h5 class="card-title">Resumo Mensal</h5>
+            <canvas id="graficoResumo"></canvas>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Últimos Contatos</h5>
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th>Nome</th>
+                  <th>Empresa</th>
+                  <th>Data</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Fernanda Lima</td>
+                  <td>Lima LTDA</td>
+                  <td>22/04/2025</td>
+                  <td><span class="badge bg-success status-badge">Respondido</span></td>
+                </tr>
+                <tr>
+                  <td>João Mendes</td>
+                  <td>JM Serviços</td>
+                  <td>21/04/2025</td>
+                  <td><span class="badge bg-warning text-dark status-badge">Pendente</span></td>
+                </tr>
+                <tr>
+                  <td>Ana Paula</td>
+                  <td>Construtora APA</td>
+                  <td>20/04/2025</td>
+                  <td><span class="badge bg-danger status-badge">Cancelado</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    const ctx = document.getElementById('graficoResumo');
+    new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+        datasets: [
+          {
+            label: 'Novos Clientes',
+            data: [200, 250, 300, 400, 380, 450, 500, 470, 530, 600, 620, 700],
+            borderColor: '#007bff',
+            backgroundColor: 'rgba(0,123,255,0.1)',
+            tension: 0.4,
+            fill: true
+          },
+          {
+            label: 'Planos Fechados',
+            data: [50, 60, 80, 90, 100, 110, 130, 140, 150, 170, 180, 0],
+            borderColor: '#28a745',
+            backgroundColor: 'rgba(40,167,69,0.1)',
+            tension: 0.4,
+            fill: true
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { position: 'bottom' } }
+      }
+    });
+  </script>
+  <script src="js/tema.js"></script>
+</body>
+</html>

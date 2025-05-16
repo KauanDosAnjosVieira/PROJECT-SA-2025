@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro - LicitHub</title>
+    <link rel="stylesheet" href="css/cadastro.css">
+</head>
+<body>
+    <div class="register-container">
+        <div class="register-left">
+            <h2>Bem-vindo de volta!</h2>
+            <p>Grandes oportunidades nascem de boas escolhas. Faça parte da melhor licitação hoje!</p>
+            <button class="signin-button" onclick="window.location.href='login.html'">Entrar</button> <!-- Redirecionamento para a página de login -->
+        </div>
+        <div class="register-right">
+            <h2>Crie Sua Conta</h2>
+            <form id="register-form" method="POST" action="cadastro.php">
+                <input type="email" placeholder="Email" name="email" id="email" required>  
+                <div class="password-container">
+                    <input type="password" placeholder="Senha" name="senha" id="password" required>
+                    <span class="toggle-password" onclick="togglePasswordVisibility('password')"></span>
+                </div>
+                
+                <div class="password-container">
+                    <input type="password" placeholder="Confirmar Senha" id="confirm-password" name="confirmarSenha" required>
+                    <span class="toggle-password" onclick="togglePasswordVisibility('confirm-password')"></span>
+                </div>
+                
+                
+                <button class="register-button" type="submit">Criar Conta</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/cadastro.js"></script> <!-- Certifique-se de que este arquivo exista e esteja correto -->
+</body>
+</html>
