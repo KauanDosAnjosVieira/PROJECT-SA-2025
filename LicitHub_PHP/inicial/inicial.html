@@ -14,33 +14,43 @@
 </head>
 <body>
   <!-- Header -->
-  <header class="header" id="header">
-    <div class="container">
-      <div class="logo">
-        <img src="icons/logo.png" alt="LicitHub">
-      </div>
-      <nav class="main-nav">
-        <ul class="nav-links">
-          <li><a href="#home" class="active">Home</a></li>
-          <li><a href="#recursos">Recursos</a></li>
-          <li><a href="#como-funciona">Como Funciona</a></li>
-          <li><a href="#planos">Planos</a></li>
-          <li><a href="#licitacoes">Licitações</a></li>
-          <li><a href="#testemunhas">Testemunhas</a></li>
-          <li><a href="#contato">Contato</a></li>
-        </ul>        
-      </nav>
-      <div class="auth-buttons">
-        <a href="../login/login.html" class="btn btn-outline">Entrar</a>
-        <a href="../login/cadastro.html" class="btn btn-primary">Cadastrar</a>
-      </div>
-      <div class="mobile-menu-btn">
-        <span></span>
-        <span></span>
-        <span></span>
-      </div>
+<!-- Header -->
+<header class="header" id="header">
+  <div class="container">
+    <div class="logo">
+      <img src="icons/logo.png" alt="LicitHub">
     </div>
-  </header>
+    <nav class="main-nav">
+      <ul class="nav-links">
+        <li><a href="#home" class="active">Home</a></li>
+        <li><a href="#recursos">Recursos</a></li>
+        <li><a href="#como-funciona">Como Funciona</a></li>
+        <li><a href="#planos">Planos</a></li>
+        <li><a href="#licitacoes">Licitações</a></li>
+        <li><a href="#testemunhas">Testemunhas</a></li>
+        <li><a href="#contato">Contato</a></li>
+      </ul>        
+    </nav>
+    <div class="auth-buttons">
+      <?php if(isset($_SESSION['user_id'])): ?>
+        <!-- Se o usuário estiver logado -->
+        <?php if($_SESSION['user_type'] === 'admin'): ?>
+          <a href="admin/dashboard.php" class="btn btn-primary">Dashboard Admin</a>
+        <?php endif; ?>
+        <a href="logout.php" class="btn btn-outline">Sair</a>
+      <?php else: ?>
+        <!-- Se o usuário não estiver logado -->
+        <a href="../login/login.php" class="btn btn-outline">Entrar</a>
+        <a href="../login/cadastro.php" class="btn btn-primary">Cadastrar</a>
+      <?php endif; ?>
+    </div>
+    <div class="mobile-menu-btn">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+  </div>
+</header>
 
   <!-- Hero Section -->
   <section class="hero" id="home">

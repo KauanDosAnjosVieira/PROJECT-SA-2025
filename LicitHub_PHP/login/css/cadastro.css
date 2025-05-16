@@ -136,3 +136,23 @@ body {
     from { opacity: 0; transform: translateY(-10px); }
     to { opacity: 1; transform: translateY(0); }
 }
+
+
+/* Mensagens de erro */
+.error-message {
+    color: #e74c3c;
+    margin-bottom: 15px;
+    font-size: 14px;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .register-container {
+        flex-direction: column;
+        width: 90%;
+    }
+    
+    .register-left, .register-right {
+        padding: 30px;
+    }
+}

@@ -1,36 +1,7 @@
 <?php
 session_start();
-
-// Verifica se o usuário está logado
-$usuario_logado = isset($_SESSION['usuario_id']);
 ?>
-
 <!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <title>Página Inicial</title>
-    <link rel="stylesheet" href="css/inicial.css">
-</head>
-<body>
-
-    <header>
-        <nav>
-            <ul>
-                <?php if ($usuarioLogado): ?>
-                    <!-- Se o usuário estiver logado, mostra a opção de sair -->
-                    <li><a href="logout.php">Sair</a></li>
-                <?php else: ?>
-                    <!-- Se o usuário não estiver logado, mostra as opções de login e cadastro -->
-                    <li><a href="login/login.html">Entrar</a></li>
-                    <li><a href="login/cadastro.html">Cadastrar</a></li>
-                <?php endif; ?>
-            </ul>
-        </nav>
-    </header>
-
-    <main>
-    <!DOCTYPE html>
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8">
@@ -45,28 +16,35 @@ $usuario_logado = isset($_SESSION['usuario_id']);
   <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </head>
 <body>
+  <!-- Header -->
+<!-- Header -->
 <header class="header" id="header">
   <div class="container">
     <div class="logo">
-      <img src="assets/logo.png" alt="LicitHub">
+      <img src="icons/logo.png" alt="LicitHub">
     </div>
     <nav class="main-nav">
       <ul class="nav-links">
         <li><a href="#home" class="active">Home</a></li>
         <li><a href="#recursos">Recursos</a></li>
+        <li><a href="#como-funciona">Como Funciona</a></li>
         <li><a href="#planos">Planos</a></li>
-        <li><a href="#sobre">Sobre</a></li>
+        <li><a href="#licitacoes">Licitações</a></li>
+        <li><a href="#testemunhas">Testemunhas</a></li>
         <li><a href="#contato">Contato</a></li>
-      </ul>
+      </ul>        
     </nav>
-    
     <div class="auth-buttons">
-      <?php if (!$usuario_logado): ?>
-        <a href="../login/login.html" class="btn btn-outline">Entrar</a>
-        <a href="../login/cadastro.html" class="btn btn-primary">Cadastrar</a>
+      <?php if(isset($_SESSION['user_id'])): ?>
+        <!-- Se o usuário estiver logado -->
+        <?php if($_SESSION['user_type'] === 'admin'): ?>
+          <a href="../adm/dashboard.php" class="btn btn-primary">Dashboard Admin</a>
+        <?php endif; ?>
+        <a href="logout.php" class="btn btn-outline">Sair</a>
       <?php else: ?>
-        <a href="../perfil.php" class="btn btn-outline">Meu Perfil</a>
-        <a href="../logout.php" class="btn btn-primary">Sair</a>
+        <!-- Se o usuário não estiver logado -->
+        <a href="../login/login.php" class="btn btn-outline">Entrar</a>
+        <a href="../login/cadastro.php" class="btn btn-primary">Cadastrar</a>
       <?php endif; ?>
     </div>
     <div class="mobile-menu-btn">
@@ -77,20 +55,19 @@ $usuario_logado = isset($_SESSION['usuario_id']);
   </div>
 </header>
 
-
   <!-- Hero Section -->
   <section class="hero" id="home">
     <div class="container">
       <div class="hero-content">
         <h1>Encontre todas as licitações em um só lugar</h1>
-        <p>Sistema completo para participação em licitações. Encontre licitaçõese organize sua participação.</p>
+        <p>Sistema completo para participação em licitações. Encontre licitações e organize sua participação.</p>
         <div class="cta-buttons">
           <a href="#cadastro" class="btn btn-primary btn-lg">Começar agora</a>
           <a href="#planos" class="btn btn-outline btn-lg">Ver planos</a>
         </div>
       </div>
       <div class="hero-image">
-        <img src="assets/hero-image.png" alt="LicitHub Platform">
+        <img src="icons/fundo2.png" alt="LicitHub Platform">
       </div>
     </div>
   </section>
@@ -166,7 +143,7 @@ $usuario_logado = isset($_SESSION['usuario_id']);
   </section>
 
   <!-- How It Works Section -->
-  <section class="how-it-works">
+  <section class="how-it-works" id="como-funciona">
     <div class="container">
       <div class="section-header">
         <h2>Como funciona</h2>
@@ -284,8 +261,40 @@ $usuario_logado = isset($_SESSION['usuario_id']);
     </div>
   </section>
 
+  <!-- Licitações Exclusivas -->
+<section class="licitacoes" id="licitacoes">
+  <div class="container">
+    <div class="section-header">
+      <h2>Licitações Exclusivas</h2>
+      <p>Serviços premium disponíveis apenas para assinantes</p>
+    </div>
+    <div class="licitacoes-grid">
+      <div class="licitacao-card">
+        <h3>Monitoramento Diário</h3>
+        <p>Acompanhe em tempo real novas oportunidades de licitação conforme seus filtros de interesse.</p>
+      </div>
+      <div class="licitacao-card">
+        <h3>Alertas Personalizados</h3>
+        <p>Receba notificações sobre licitações relevantes direto no seu e-mail ou painel.</p>
+      </div>
+      <div class="licitacao-card">
+        <h3>Download de Editais</h3>
+        <p>Tenha acesso rápido e ilimitado aos documentos dos editais disponíveis na plataforma.</p>
+      </div>
+      <div class="licitacao-card">
+        <h3>Consultoria Especializada</h3>
+        <p>Conte com suporte estratégico para análise de licitações e montagem de propostas.</p>
+      </div>
+    </div>
+    <div class="text-center mt-5">
+      <a href="../login/cadastro.html" class="btn btn-primary btn-lg">Quero Acessar</a>
+    </div>
+  </div>
+</section>
+
+
   <!-- Testimonials Section -->
-  <section class="testimonials">
+  <section class="testimonials" id="testemunhas">
     <div class="container">
       <div class="section-header">
         <h2>O que dizem nossos clientes</h2>
@@ -382,23 +391,24 @@ $usuario_logado = isset($_SESSION['usuario_id']);
   </section>
 
   <!-- CTA Section -->
-  <section class="cta">
+  <section class="cta" id="contato">
     <div class="container">
       <div class="cta-content">
-        <h2>Pronto para transformar sua participação em licitações?</h2>
-        <p>Junte-se a centenas de empresas que já estão usando o LicitHub para aumentar suas chances de sucesso.</p>
-        <a href="#planos" class="btn btn-primary btn-lg animated-link">Comece agora mesmo</a>
+        <h2>Entre em contato com a nossa equipe</h2>
+        <p>Estamos prontos para ajudar você a tirar dúvidas, entender melhor nossos planos ou dar o próximo passo rumo ao sucesso em licitações.</p>
+        <a href="../contato/contato.html" class="btn btn-primary btn-lg animated-link">Entre em Contato</a>
       </div>
     </div>
   </section>
 
   <!-- Footer -->
-  <footer class="footer">
+  <section id="footer">
+    <footer class="footer">  
     <div class="container">
       <div class="footer-grid">
         <div class="footer-col">
           <div class="footer-logo">
-            <img src="assets/logo-white.png" alt="LicitHub">
+            <img src="icons/logo-branca.png" alt="LicitHub" color="white">
           </div>
           <p>Transformando a forma como empresas participam de licitações públicas desde 2024.</p>
           <div class="social-links">
@@ -418,24 +428,17 @@ $usuario_logado = isset($_SESSION['usuario_id']);
           <ul class="footer-links">
             <li><a href="#home">Home</a></li>
             <li><a href="#recursos">Recursos</a></li>
+            <li><a href="#como-funciona">Como Funciona</a></li>
             <li><a href="#planos">Planos</a></li>
-            <li><a href="#sobre">Sobre</a></li>
+            <li><a href="#testemunhas">Testemunhas</a></li>
             <li><a href="#contato">Contato</a></li>
           </ul>
         </div>
-        <div class="footer-col">
-          <h3>Recursos</h3>
-          <ul class="footer-links">
-            <li><a href="#">Busca de Licitações</a></li>
-            <li><a href="#">Notificações</a></li>
-            <li><a href="#">Dashboard</a></li>
-            <li><a href="#">Relatórios</a></li>
-          </ul>
-        </div>
+       
         <div class="footer-col">
           <h3>Contato</h3>
           <ul class="contact-info">
-            <li><i class="fas fa-envelope"></i> licithub@gmail.com.br</li>
+            <li><i class="fas fa-envelope"></i> kgb.licithub@gmail.com.br</li>
             <li><i class="fas fa-phone"></i> (47) 3456-7890</li>
             <li><i class="fas fa-map-marker-alt"></i> R. Arno Waldemar Döhler, 957 - Zona Industrial Norte, Joinville - SC</li>
           </ul>
@@ -446,11 +449,8 @@ $usuario_logado = isset($_SESSION['usuario_id']);
       </div>
     </div>
   </footer>
+</section>
 
   <script src="js/script.js"></script>
-</body>
-</html>    
-</main>
-
 </body>
 </html>

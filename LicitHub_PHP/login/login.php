@@ -1,46 +1,59 @@
 <?php
 session_start();
+require_once '../conexao.php';
 
-$erro = ''; // Variável para armazenar o erro
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $conn = new mysqli('localhost', 'root', '', 'licithub');
 
-    if ($conn->connect_error) {
-        die("Erro de conexão: " . $conn->connect_error);
-    }
 
-    $email = $_POST['email'] ?? '';
-    $password = $_POST['password'] ?? ''; // Alterado de 'senha' para 'password'
+// Configurações do banco de dados
+$host = 'localhost';
+$dbname = 'licithub';
+$username = 'root';
+$password = '';
 
-    // Verificar se o usuário existe
-    $sql = "SELECT id, name, email, password, user_type FROM users WHERE email = ?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("s", $email);
-    $stmt->execute();
-    $resultado = $stmt->get_result();
-
-    if ($resultado->num_rows > 0) {
-        $usuario = $resultado->fetch_assoc();
+// Conexão com o banco de dados
+try {
+    $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8mb4", $username, $password);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
+        $password = $_POST['password'];
         
-        // Verifica a senha
-        if (password_verify($password, $usuario['password'])) {
-            $_SESSION['usuario_id'] = $usuario['id'];
-            $_SESSION['usuario_email'] = $usuario['email'];
-            $_SESSION['usuario_nome'] = $usuario['name'];
-            $_SESSION['usuario_tipo'] = $usuario['user_type'];
-            
-            header("Location: ../inicial/inicial.php");
-            exit();
+        // Validações básicas
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            echo "<script>alert('Por favor, insira um e-mail válido.');</script>";
+        } elseif (empty($password)) {
+            echo "<script>alert('Por favor, insira sua senha.');</script>";
         } else {
-            $erro = 'Senha incorreta!';
+            // Buscar usuário no banco
+            $stmt = $pdo->prepare("SELECT * FROM users WHERE email = ?");
+            $stmt->execute([$email]);
+            $user = $stmt->fetch();
+            
+            if ($user && password_verify($password, $user['password'])) {
+                // Login bem-sucedido
+                $_SESSION['user_id'] = $user['id'];
+                $_SESSION['user_email'] = $user['email'];
+                $_SESSION['user_name'] = $user['name'];
+                $_SESSION['user_type'] = $user['user_type'];
+                
+                // Redirecionar conforme tipo de usuário
+                if ($user['user_type'] === 'admin') {
+                    header("Location: ../inicial/inicial.php");
+                } elseif ($user['user_type'] === 'employee') {
+                    header("Location: inicial/inicial.php");
+                } else {
+                    header("Location: ../inicial/inicial.php");
+                }
+                exit();
+            } else {
+                echo "<script>alert('E-mail ou senha incorretos.');</script>";
+            }
         }
-    } else {
-        $erro = 'Email não encontrado!';
     }
-
-    $stmt->close();
-    $conn->close();
+} catch (PDOException $e) {
+    echo "<script>alert('Erro no sistema. Tente novamente mais tarde.');</script>";
 }
 ?>
 
@@ -50,35 +63,30 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="css/login.css" />
-  <script src="js/login.js" defer></script>
+  <script src="js/login.js"></script>
   <title>Login</title>
 </head>
 <body>
   <div class="container">
     <div class="login-panel">
       <h2>Faça seu login</h2>
-      <form method="POST" action="login.php">
+      <form method="POST">
         <label for="email">Email</label>
         <input type="email" name="email" id="email" placeholder="Email" required>
 
         <label for="senha">Senha</label>
-        <input type="password" placeholder="Senha" name="password" id="password" required>
-        <span class="toggle-password" onclick="togglePasswordVisibility('password')"></span>
-
+        <div class="password-container">
+          <input type="password" placeholder="Senha" name="password" id="password" required>
+          <span class="toggle-password" onclick="togglePasswordVisibility()"></span>
+        </div>
+        
         <a href="forgotpassword.html" class="forgot">Esqueci minha senha</a>
         <button type="submit" class="login-btn">Entrar</button>
       </form>
-
-      <?php
-      if ($erro) {
-          echo "<script>alert('$erro'); window.location.href = 'login.php';</script>";
-      }
-      ?>
-
-      <a href="cadastro.php" class="register">Ainda não tenho uma conta</a>
+      <a href="cadastro.html" class="register">Ainda não tenho uma conta</a>
     </div>
-    <div class="image-panel">
-    </div>
+    <div class="image-panel"></div>
   </div>
+
 </body>
 </html>

@@ -1,28 +1,43 @@
-function togglePasswordVisibility(id) {
-    const input = document.getElementById(id);
-    if (input.type === "password") {
-        input.type = "text";
+// cadastro.js
+
+function togglePasswordVisibility(fieldId) {
+    const passwordField = document.getElementById(fieldId);
+    const toggleIcon = passwordField.nextElementSibling;
+    
+    if (passwordField.type === "password") {
+        passwordField.type = "text";
+        toggleIcon.classList.add("visible");
     } else {
-        input.type = "password";
+        passwordField.type = "password";
+        toggleIcon.classList.remove("visible");
     }
 }
 
-// Validação do formulário ao ser enviado
-document.getElementById('register-form').addEventListener('submit', function(event) {
-    const senha = document.getElementById('password').value;
-    const confirmarSenha = document.getElementById('confirm-password').value;
-
-    if (senha !== confirmarSenha) {
-        alert("As senhas não coincidem. Por favor, insira as mesmas senhas.");
-        event.preventDefault(); // Impede o envio se as senhas forem diferentes
+// Validação do formulário no lado do cliente
+document.getElementById('register-form').addEventListener('submit', function(e) {
+    const password = document.getElementById('password').value;
+    const confirmPassword = document.getElementById('confirm-password').value;
+    const email = document.getElementById('email').value;
+    
+    // Validação básica de email
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        e.preventDefault();
+        alert('Por favor, insira um e-mail válido.');
         return false;
     }
-
-    if (senha.length < 6) {
-        alert("A senha deve ter pelo menos 6 caracteres.");
-        event.preventDefault();
+    
+    // Validação de senha
+    if (password.length < 8) {
+        e.preventDefault();
+        alert('A senha deve ter pelo menos 8 caracteres!');
         return false;
     }
-
-    // Se tudo estiver certo, o formulário é enviado normalmente
+    
+    if (password !== confirmPassword) {
+        e.preventDefault();
+        alert('As senhas não coincidem!');
+        return false;
+    }
+    
+    return true;
 });
