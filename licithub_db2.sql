@@ -1,3 +1,4 @@
+create database licithub;
 use licithub;
 
 -- Tabela de usuários (users)
@@ -211,3 +212,7 @@ INSERT INTO `roles` (`name`, `permissions`, `created_at`, `updated_at`) VALUES
 INSERT INTO `user_roles` (`user_id`, `role_id`, `created_at`) VALUES
 (9, 1, NOW()),  -- Admin tem role de admin
 (10, 2, NOW()); -- Suporte tem role de support
+
+ALTER TABLE users 
+ADD COLUMN reset_token VARCHAR(255) DEFAULT NULL,
+ADD COLUMN reset_token_expires DATETIME DEFAULT NULL;
