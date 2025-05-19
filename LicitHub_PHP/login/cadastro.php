@@ -69,7 +69,7 @@ try {
         $_SESSION['user_email'] = $user['email'];
         $_SESSION['user_type'] = $user['user_type'];
         
-        showAlertAndRedirect("Cadastro realizado com sucesso!", false, 'dashboard.php');
+        showAlertAndRedirect("Cadastro realizado com sucesso!", false, 'login.php');
     }
 
     // Se não for POST, exibe o formulário

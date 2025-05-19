@@ -181,85 +181,84 @@ session_start();
       </div>
     </div>
   </section>
-
-  <!-- Pricing Section -->
-  <section class="pricing" id="planos">
-    <div class="container">
-      <div class="section-header">
-        <h2>Planos e Preços</h2>
-        <p>Escolha o plano que melhor se adequa às necessidades da sua empresa</p>
+<!-- Pricing Section -->
+<!-- Pricing Section -->
+<section class="pricing" id="planos">
+  <div class="container">
+    <div class="section-header">
+      <h2>Planos e Preços</h2>
+      <p>Escolha o plano que melhor se adequa às necessidades da sua empresa</p>
+    </div>
+    <div class="pricing-grid">
+      <!-- Plano Iniciante -->
+      <div class="pricing-card">
+        <div class="pricing-header">
+          <h3>Iniciante</h3>
+          <div class="pricing-price">
+            <span class="price">R$39</span>
+            <span class="period">/mês</span>
+          </div>
+        </div>
+        <div class="pricing-features">
+          <ul>
+            <li>Acesso ilimitado às licitações</li>
+            <li>Busca básica</li>
+            <li>1 usuário</li>
+            <li>Suporte por email</li>
+          </ul>
+        </div>
+        <div class="pricing-footer">
+          <a href="../pagamento/checkout.php?plano=Iniciante&preco=39" class="btn btn-outline btn-block">Escolher Plano</a>
+        </div>
       </div>
-      <div class="pricing-grid">
-        <div class="pricing-card">
-          <div class="pricing-header">
-            <h3>Iniciante</h3>
-            <div class="pricing-price">
-              <span class="price">R$39</span>
-              <span class="period">/mês</span>
-            </div>
-          </div>
-          <div class="pricing-features">
-            <ul>
-              <li>Acesso ilimitado às licitações</li>
-              <li>Busca básica</li>
-              <li>1 usuário</li>
-              <li>Suporte por email</li>
-              <li class="disabled">Notificações personalizadas</li>
-              <li class="disabled">Dashboard avançado</li>
-            </ul>
-          </div>
-          <div class="pricing-footer">
-            <a href="#cadastro" class="btn btn-outline btn-block">Escolher Plano</a>
+      
+      <!-- Plano Profissional -->
+      <div class="pricing-card popular">
+        <div class="popular-tag">Mais popular</div>
+        <div class="pricing-header">
+          <h3>Profissional</h3>
+          <div class="pricing-price">
+            <span class="price">R$75</span>
+            <span class="period">/mês</span>
           </div>
         </div>
-        <div class="pricing-card popular">
-          <div class="popular-tag">Mais popular</div>
-          <div class="pricing-header">
-            <h3>Profissional</h3>
-            <div class="pricing-price">
-              <span class="price">R$75</span>
-              <span class="period">/mês</span>
-            </div>
-          </div>
-          <div class="pricing-features">
-            <ul>
-              <li>Acesso completo às licitações</li>
-              <li>Busca avançada com filtros</li>
-              <li>Até 3 usuários</li>
-              <li>Suporte prioritário</li>
-              <li>Notificações personalizadas</li>
-              <li class="disabled">Dashboard avançado</li>
-            </ul>
-          </div>
-          <div class="pricing-footer">
-            <a href="#cadastro" class="btn btn-primary btn-block">Escolher Plano</a>
+        <div class="pricing-features">
+          <ul>
+            <li>Acesso completo às licitações</li>
+            <li>Busca avançada com filtros</li>
+            <li>Até 3 usuários</li>
+            <li>Suporte prioritário</li>
+          </ul>
+        </div>
+        <div class="pricing-footer">
+          <a href="../pagamento/checkout.php?plano=Profissional&preco=75" class="btn btn-primary btn-block">Escolher Plano</a>
+        </div>
+      </div>
+      
+      <!-- Plano Premium -->
+      <div class="pricing-card">
+        <div class="pricing-header">
+          <h3>Premium</h3>
+          <div class="pricing-price">
+            <span class="price">R$92</span>
+            <span class="period">/mês</span>
           </div>
         </div>
-        <div class="pricing-card">
-          <div class="pricing-header">
-            <h3>Premium</h3>
-            <div class="pricing-price">
-              <span class="price">R$92</span>
-              <span class="period">/mês</span>
-            </div>
-          </div>
-          <div class="pricing-features">
-            <ul>
-              <li>Acesso completo às licitações</li>
-              <li>Busca avançada com filtros</li>
-              <li>Usuários ilimitados</li>
-              <li>Suporte 24/7</li>
-              <li>Notificações personalizadas</li>
-              <li>Dashboard avançado e relatórios</li>
-            </ul>
-          </div>
-          <div class="pricing-footer">
-            <a href="#cadastro" class="btn btn-outline btn-block">Escolher Plano</a>
-          </div>
+        <div class="pricing-features">
+          <ul>
+            <li>Acesso completo às licitações</li>
+            <li>Busca avançada com filtros</li>
+            <li>Usuários ilimitados</li>
+            <li>Suporte 24/7</li>
+          </ul>
+        </div>
+        <div class="pricing-footer">
+          <a href="../pagamento/checkout.php?plano=Premium&preco=92" class="btn btn-outline btn-block">Escolher Plano</a>
         </div>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
   <!-- Licitações Exclusivas -->
 <section class="licitacoes" id="licitacoes">

@@ -1,7 +1,7 @@
 <?php
 // index.php
 session_start();
-require_once 'config/database.php';
+require_once '../conexao.php';
 
 // Verificar se o usuário está logado
 if (!isset($_SESSION['user_id'])) {
@@ -377,4 +377,4 @@ $_SESSION['checkout'] = [
     });
 </script>
 </body>
-</html>
+</html> 

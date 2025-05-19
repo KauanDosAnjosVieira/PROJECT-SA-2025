@@ -36,7 +36,12 @@ class Conexao {
         if (!isset(self::$instancia)) {
             self::$instancia = new Conexao();
         }
-        return self::$instancia->pdo;
+        return self::$instancia;
+    }
+
+    // Método para obter a conexão PDO diretamente
+    public function getPdo() {
+        return $this->pdo;
     }
 
     // Impedir clonagem
@@ -48,8 +53,7 @@ class Conexao {
     }
 }
 
-// Função auxiliar para obter a conexão
+// Função auxiliar para obter a conexão PDO
 function getConexao() {
-    return Conexao::getInstancia();
+    return Conexao::getInstancia()->getPdo();
 }
-?>

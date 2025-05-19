@@ -1,0 +1,80 @@
+body {
+  background-color: #f8f9fa;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.plan-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border: none;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.plan-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.plan-card .card-header {
+  padding: 1.5rem;
+}
+
+.plan-card .card-body {
+  padding: 2rem;
+}
+
+.plan-card .card-footer {
+  padding: 1rem;
+  background-color: white;
+  border-top: none;
+}
+
+.avatar {
+  background-color: #6c757d;
+  font-weight: bold;
+}
+
+.checkout-container {
+  background-color: white;
+  border-radius: 10px;
+  padding: 2rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.payment-methods .form-check {
+  padding: 1rem;
+  border: 1px solid #dee2e6;
+  border-radius: 5px;
+  margin-bottom: 1rem;
+  cursor: pointer;
+}
+
+.payment-methods .form-check:hover {
+  border-color: #0d6efd;
+}
+
+.payment-methods .form-check-input:checked + .form-check-label {
+  color: #0d6efd;
+  font-weight: bold;
+}
+
+.payment-methods .form-check-input {
+  margin-top: 0.3rem;
+}
+
+.table th {
+  background-color: #f8f9fa;
+  font-weight: 600;
+}
+
+.badge {
+  font-weight: 500;
+  padding: 0.5em 0.75em;
+}
+
+@media (max-width: 768px) {
+  .plan-card {
+      margin-bottom: 2rem;
+  }
+}
