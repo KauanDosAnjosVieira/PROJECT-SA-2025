@@ -14,7 +14,12 @@
                         </div>
                     @endif
 
-                    {{ __('You are logged in!') }}
+                    {{ __('Você está logado!') }}
+                    
+                    <div class="mt-3">
+                        <h4>Bem-vindo, {{ Auth::user()->name }}!</h4>
+                        <p>Tipo de usuário: {{ Auth::user()->user_type }}</p>
+                    </div>
                 </div>
             </div>
         </div>
