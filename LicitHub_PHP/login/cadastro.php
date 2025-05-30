@@ -88,7 +88,7 @@ try {
         <div class="register-left">
             <h2>Bem-vindo de volta!</h2>
             <p>Grandes oportunidades nascem de boas escolhas. Faça parte da melhor licitação hoje!</p>
-            <button class="signin-button" onclick="window.location.href='login.html'">Entrar</button> <!-- Redirecionamento para a página de login -->
+            <button class="signin-button" onclick="window.location.href='login.php'">Entrar</button> <!-- Redirecionamento para a página de login -->
         </div>
         <div class="register-right">
             <h2>Crie Sua Conta</h2>

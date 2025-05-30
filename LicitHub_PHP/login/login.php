@@ -80,10 +80,10 @@ try {
           <span class="toggle-password" onclick="togglePasswordVisibility()"></span>
         </div>
         
-        <a href="forgotpassword.html" class="forgot">Esqueci minha senha</a>
+        <a href="forgot-password.php" class="forgot">Esqueci minha senha</a>
         <button type="submit" class="login-btn">Entrar</button>
       </form>
-      <a href="cadastro.html" class="register">Ainda não tenho uma conta</a>
+      <a href="cadastro.php" class="register">Ainda não tenho uma conta</a>
     </div>
     <div class="image-panel"></div>
   </div>

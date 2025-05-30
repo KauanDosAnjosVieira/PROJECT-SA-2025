@@ -85,7 +85,7 @@ try {
         <a href="planos.php"><i class="bi bi-card-list"></i> Planos</a>
         <a href="contatos.php"><i class="bi bi-envelope"></i> Contatos</a>
         <a href="config.php"><i class="bi bi-gear"></i> Configurações</a>
-        <a href="../login/logout.php" class="mt-4"><i class="bi bi-box-arrow-left"></i> Sair</a>
+        <a href="../inicial/inicial.php" class="mt-4"><i class="bi bi-box-arrow-left"></i> Sair</a>
       </div>
 
       <div class="col-md-10 content">

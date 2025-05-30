@@ -4,11 +4,14 @@ session_start();
 // Capturar parâmetros da URL com valores padrão
 $plano = isset($_GET['plano']) ? htmlspecialchars($_GET['plano']) : 'Plano não especificado';
 $preco = isset($_GET['preco']) ? (float)$_GET['preco'] : 0.00;
+$plan_id = isset($_GET['plan_id']) ? (int)$_GET['plan_id'] : 0;
 
 // Armazenar na sessão para uso posterior
 $_SESSION['plano_selecionado'] = $plano;
 $_SESSION['preco_plano'] = $preco;
+$_SESSION['plan_id'] = $plan_id;
 ?>
+
 
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -187,52 +190,51 @@ $_SESSION['preco_plano'] = $preco;
         <div class="payment-card">
           <h2 class="mb-4"><i class="fas fa-credit-card me-2"></i>Informações de Pagamento</h2>
           
-          <form id="payment-form" action="processar_pagamento.php" method="POST">
-            <input type="hidden" name="plano" value="<?php echo $plano; ?>">
-            <input type="hidden" name="preco" value="<?php echo $preco; ?>">
-            
-            <h5 class="mb-3">Dados Pessoais</h5>
-            <div class="row mb-4">
-              <div class="col-md-6 mb-3">
-                <label for="nome" class="form-label">Nome Completo*</label>
-                <input type="text" class="form-control" id="nome" name="nome" required>
-              </div>
-              <div class="col-md-6 mb-3">
-                <label for="email" class="form-label">E-mail*</label>
-                <input type="email" class="form-control" id="email" name="email" required>
-              </div>
-              <div class="col-md-6">
-                <label for="cpf" class="form-label">CPF*</label>
-                <input type="text" class="form-control" id="cpf" name="cpf" required>
-              </div>
-              <div class="col-md-6">
-                <label for="telefone" class="form-label">Telefone*</label>
-                <input type="tel" class="form-control" id="telefone" name="telefone" required>
-              </div>
-            </div>
-            
-            <h5 class="mb-3">Método de Pagamento</h5>
-            <div class="payment-methods mb-4">
-              <div class="payment-method active" id="credit-card-method">
-                <i class="far fa-credit-card"></i>
-                <div>
-                  <h6 class="mb-1">Cartão de Crédito</h6>
-                  <p class="small text-muted mb-0">Pague com Visa, Mastercard ou outros</p>
-                </div>
-                <div class="ms-auto">
-                  <img src="assets/img/visa.png" class="card-icon" alt="Visa">
-                  <img src="assets/img/mastercard.png" class="card-icon" alt="Mastercard">
-                </div>
-              </div>
-              
-              <div class="payment-method" id="pix-method">
-                <i class="fas fa-qrcode"></i>
-                <div>
-                  <h6 class="mb-1">PIX</h6>
-                  <p class="small text-muted mb-0">Pagamento instantâneo e sem taxas</p>
-                </div>
-              </div>
-            </div>
+          <form id="payment-form" action="process_payment.php" method="POST">
+    <input type="hidden" name="plan_id" value="<?php echo $plan_id; ?>">
+    <input type="hidden" name="plano" value="<?php echo $plano; ?>">
+    <input type="hidden" name="preco" value="<?php echo $preco; ?>">
+    
+    <h5 class="mb-3">Dados Pessoais</h5>
+    <div class="row mb-4">
+      <div class="col-md-6 mb-3">
+        <label for="name" class="form-label">Nome Completo*</label>
+        <input type="text" class="form-control" id="name" name="name" required>
+      </div>
+      <div class="col-md-6 mb-3">
+        <label for="email" class="form-label">E-mail*</label>
+        <input type="email" class="form-control" id="email" name="email" required>
+      </div>
+      <div class="col-md-6">
+        <label for="cpf" class="form-label">CPF*</label>
+        <input type="text" class="form-control" id="cpf" name="cpf" required>
+      </div>
+      <div class="col-md-6">
+        <label for="phone" class="form-label">Telefone*</label>
+        <input type="tel" class="form-control" id="phone" name="phone" required>
+      </div>
+    </div>
+    
+    <h5 class="mb-3">Método de Pagamento</h5>
+    <div class="payment-methods mb-4">
+      <div class="payment-method active" id="credit-card-method">
+        <i class="far fa-credit-card"></i>
+        <div>
+          <h6 class="mb-1">Cartão de Crédito</h6>
+          <p class="small text-muted mb-0">Pague com Visa, Mastercard ou outros</p>
+        </div>
+        <input type="hidden" name="payment_method" id="payment_method" value="credit_card">
+      </div>
+      
+      <div class="payment-method" id="pix-method">
+        <i class="fas fa-qrcode"></i>
+        <div>
+          <h6 class="mb-1">PIX</h6>
+          <p class="small text-muted mb-0">Pagamento instantâneo e sem taxas</p>
+        </div>
+      </div>
+    </div>
+
             
             <div id="credit-card-form">
               <div class="mb-3">
@@ -301,7 +303,8 @@ $_SESSION['preco_plano'] = $preco;
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script>
-    // Alternar entre métodos de pagamento
+    
+   // Atualização para definir o método de pagamento
     const paymentMethods = document.querySelectorAll('.payment-method');
     paymentMethods.forEach(method => {
       method.addEventListener('click', function() {
@@ -309,17 +312,13 @@ $_SESSION['preco_plano'] = $preco;
         this.classList.add('active');
         
         if (this.id === 'credit-card-method') {
+          document.getElementById('payment_method').value = 'credit_card';
           document.getElementById('credit-card-form').style.display = 'block';
           document.getElementById('pix-form').style.display = 'none';
-          document.querySelectorAll('#credit-card-form input').forEach(input => {
-            input.required = true;
-          });
         } else {
+          document.getElementById('payment_method').value = 'pix';
           document.getElementById('credit-card-form').style.display = 'none';
           document.getElementById('pix-form').style.display = 'block';
-          document.querySelectorAll('#credit-card-form input').forEach(input => {
-            input.required = false;
-          });
         }
       });
     });

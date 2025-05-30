@@ -31,7 +31,7 @@ session_start();
         <li><a href="#planos">Planos</a></li>
         <li><a href="#licitacoes">Licitações</a></li>
         <li><a href="#testemunhas">Testemunhas</a></li>
-        <li><a href="#contato">Contato</a></li>
+        <li><a href="#contato">Contato</a></li> 
       </ul>        
     </nav>
     <div class="auth-buttons">
@@ -62,9 +62,11 @@ session_start();
         <h1>Encontre todas as licitações em um só lugar</h1>
         <p>Sistema completo para participação em licitações. Encontre licitações e organize sua participação.</p>
         <div class="cta-buttons">
-          <a href="#cadastro" class="btn btn-primary btn-lg">Começar agora</a>
-          <a href="#planos" class="btn btn-outline btn-lg">Ver planos</a>
-        </div>
+    <?php if(!isset($_SESSION['user_id'])): ?>
+        <a href="#cadastro" class="btn btn-primary btn-lg">Começar agora</a>
+    <?php endif; ?>
+    <a href="#planos" class="btn btn-outline btn-lg">Ver planos</a>
+</div>
       </div>
       <div class="hero-image">
         <img src="icons/fundo2.png" alt="LicitHub Platform">
@@ -286,7 +288,7 @@ session_start();
       </div>
     </div>
     <div class="text-center mt-5">
-      <a href="../login/cadastro.html" class="btn btn-primary btn-lg">Quero Acessar</a>
+      <a href="#planos" class="btn btn-primary btn-lg">Quero Acessar</a>
     </div>
   </div>
 </section>
@@ -395,7 +397,7 @@ session_start();
       <div class="cta-content">
         <h2>Entre em contato com a nossa equipe</h2>
         <p>Estamos prontos para ajudar você a tirar dúvidas, entender melhor nossos planos ou dar o próximo passo rumo ao sucesso em licitações.</p>
-        <a href="../contato/contato.html" class="btn btn-primary btn-lg animated-link">Entre em Contato</a>
+        <a href="../contato/contato.php" class="btn btn-primary btn-lg animated-link">Entre em Contato</a>
       </div>
     </div>
   </section>
