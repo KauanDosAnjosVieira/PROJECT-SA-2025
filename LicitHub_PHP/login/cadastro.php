@@ -114,25 +114,6 @@ try {
     <script src="js/cadastro.js"></script> <!-- Certifique-se de que este arquivo exista e esteja correto -->
 </body>
 </html>
-
-   
-
-        <script>
-            function togglePassword(fieldId) {
-                const field = document.getElementById(fieldId);
-                const icon = field.nextElementSibling;
-                
-                if (field.type === 'password') {
-                    field.type = 'text';
-                    icon.classList.remove('bi-eye');
-                    icon.classList.add('bi-eye-slash');
-                } else {
-                    field.type = 'password';
-                    icon.classList.remove('bi-eye-slash');
-                    icon.classList.add('bi-eye');
-                }
-            }
-        </script>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
     </body>
     </html>

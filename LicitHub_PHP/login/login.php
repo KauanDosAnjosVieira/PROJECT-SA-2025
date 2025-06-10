@@ -2,9 +2,6 @@
 session_start();
 require_once '../conexao.php';
 
-
-
-
 // Configurações do banco de dados
 $host = 'localhost';
 $dbname = 'licithub';
@@ -87,6 +84,5 @@ try {
     </div>
     <div class="image-panel"></div>
   </div>
-
 </body>
 </html>

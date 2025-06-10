@@ -19,7 +19,7 @@ $cliente = $pdo->query("
     SELECT u.*, s.id as subscription_id, s.plan_id, s.status 
     FROM users u
     LEFT JOIN subscriptions s ON u.id = s.user_id
-    WHERE u.id = $cliente_id AND u.user_type = 'customer'
+    WHERE u.id = $cliente_id
 ")->fetch();
 
 // Se não encontrou o cliente, redireciona
@@ -39,31 +39,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['editar_cliente'])) {
     $telefone = trim($_POST['telefone']);
     $plano_id = intval($_POST['plano_id']);
     $status = $_POST['status'];
+    $user_type = $_POST['user_type']; // Novo campo para tipo de usuário
     
     try {
         $pdo->beginTransaction();
         
         // Atualizar dados do usuário
-        $stmt = $pdo->prepare("UPDATE users SET name = ?, email = ?, phone = ?, updated_at = NOW() WHERE id = ?");
-        $stmt->execute([$nome, $email, $telefone, $cliente_id]);
+        $stmt = $pdo->prepare("UPDATE users SET name = ?, email = ?, phone = ?, user_type = ?, updated_at = NOW() WHERE id = ?");
+        $stmt->execute([$nome, $email, $telefone, $user_type, $cliente_id]);
         
-        // Atualizar assinatura
-        if ($cliente['subscription_id']) {
-            $stmt = $pdo->prepare("UPDATE subscriptions SET plan_id = ?, status = ? WHERE id = ?");
-            $stmt->execute([$plano_id, $status, $cliente['subscription_id']]);
-        } else {
-            $stmt = $pdo->prepare("INSERT INTO subscriptions (user_id, plan_id, status, starts_at, ends_at) 
-                                  VALUES (?, ?, ?, NOW(), DATE_ADD(NOW(), INTERVAL 1 MONTH))");
-            $stmt->execute([$cliente_id, $plano_id, $status]);
+        // Atualizar assinatura (apenas para clientes)
+        if ($user_type == 'customer') {
+            if ($cliente['subscription_id']) {
+                $stmt = $pdo->prepare("UPDATE subscriptions SET plan_id = ?, status = ? WHERE id = ?");
+                $stmt->execute([$plano_id, $status, $cliente['subscription_id']]);
+            } else {
+                $stmt = $pdo->prepare("INSERT INTO subscriptions (user_id, plan_id, status, starts_at, ends_at) 
+                                      VALUES (?, ?, ?, NOW(), DATE_ADD(NOW(), INTERVAL 1 MONTH))");
+                $stmt->execute([$cliente_id, $plano_id, $status]);
+            }
         }
         
         $pdo->commit();
-        $_SESSION['mensagem'] = "Cliente atualizado com sucesso!";
+        $_SESSION['mensagem'] = "Usuário atualizado com sucesso!";
         header("Location: clientes.php");
         exit();
     } catch (PDOException $e) {
         $pdo->rollBack();
-        $erro = "Erro ao atualizar cliente: " . $e->getMessage();
+        $erro = "Erro ao atualizar usuário: " . $e->getMessage();
     }
 }
 ?>
@@ -73,7 +76,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['editar_cliente'])) {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Editar Cliente - LicitHub</title>
+  <title>Editar Usuário - LicitHub</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
   <style>
@@ -96,7 +99,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['editar_cliente'])) {
         <div class="card">
           <div class="card-header bg-primary text-white">
             <div class="d-flex justify-content-between align-items-center">
-              <h4 class="mb-0">Editar Cliente</h4>
+              <h4 class="mb-0">Editar Usuário</h4>
               <a href="clientes.php" class="btn btn-light btn-sm">
                 <i class="bi bi-arrow-left"></i> Voltar
               </a>
@@ -132,27 +135,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['editar_cliente'])) {
                          value="<?php echo htmlspecialchars($cliente['phone'] ?? ''); ?>">
                 </div>
                 <div class="col-md-6">
-                  <label for="plano_id" class="form-label">Plano</label>
-                  <select class="form-select" id="plano_id" name="plano_id" required>
-                    <option value="">Selecione um plano</option>
-                    <?php foreach ($planos as $plano): ?>
-                    <option value="<?php echo $plano['id']; ?>" 
-                        <?php echo ($plano['id'] == ($cliente['plan_id'] ?? 0)) ? 'selected' : ''; ?>>
-                        <?php echo htmlspecialchars($plano['name']); ?>
-                    </option>
-                    <?php endforeach; ?>
+                  <label for="user_type" class="form-label">Tipo de Usuário</label>
+                  <select class="form-select" id="user_type" name="user_type" required>
+                    <option value="customer" <?php echo ($cliente['user_type'] == 'customer') ? 'selected' : ''; ?>>Cliente</option>
+                    <option value="admin" <?php echo ($cliente['user_type'] == 'admin') ? 'selected' : ''; ?>>Administrador</option>
                   </select>
                 </div>
               </div>
               
-              <div class="row mb-4">
-                <div class="col-md-6">
-                  <label for="status" class="form-label">Status</label>
-                  <select class="form-select" id="status" name="status" required>
-                    <option value="ativo" <?php echo (($cliente['status'] ?? '') == 'ativo' ? 'selected' : ''); ?>>Ativo</option>
-                    <option value="pendente" <?php echo (($cliente['status'] ?? '') == 'pendente' ? 'selected' : ''); ?>>Pendente</option>
-                    <option value="inativo" <?php echo (($cliente['status'] ?? '') == 'inativo' ? 'selected' : ''); ?>>Inativo</option>
-                  </select>
+              <div id="plano_fields" style="<?php echo ($cliente['user_type'] == 'admin') ? 'display: none;' : ''; ?>">
+                <div class="row mb-3">
+                  <div class="col-md-6">
+                    <label for="plano_id" class="form-label">Plano</label>
+                    <select class="form-select" id="plano_id" name="plano_id">
+                      <option value="">Selecione um plano</option>
+                      <?php foreach ($planos as $plano): ?>
+                      <option value="<?php echo $plano['id']; ?>" 
+                          <?php echo ($plano['id'] == ($cliente['plan_id'] ?? 0)) ? 'selected' : ''; ?>>
+                          <?php echo htmlspecialchars($plano['name']); ?>
+                      </option>
+                      <?php endforeach; ?>
+                    </select>
+                  </div>
+                  <div class="col-md-6">
+                    <label for="status" class="form-label">Status</label>
+                    <select class="form-select" id="status" name="status">
+                      <option value="ativo" <?php echo (($cliente['status'] ?? '') == 'ativo' ? 'selected' : ''); ?>>Ativo</option>
+                      <option value="pendente" <?php echo (($cliente['status'] ?? '') == 'pendente' ? 'selected' : ''); ?>>Pendente</option>
+                      <option value="inativo" <?php echo (($cliente['status'] ?? '') == 'inativo' ? 'selected' : ''); ?>>Inativo</option>
+                    </select>
+                  </div>
                 </div>
               </div>
               
@@ -177,6 +189,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['editar_cliente'])) {
     document.getElementById('telefone').addEventListener('input', function(e) {
       var x = e.target.value.replace(/\D/g, '').match(/(\d{0,2})(\d{0,5})(\d{0,4})/);
       e.target.value = !x[2] ? x[1] : '(' + x[1] + ') ' + x[2] + (x[3] ? '-' + x[3] : '');
+    });
+    
+    // Mostrar/ocultar campos de plano conforme tipo de usuário
+    document.getElementById('user_type').addEventListener('change', function() {
+      const planoFields = document.getElementById('plano_fields');
+      if (this.value === 'customer') {
+        planoFields.style.display = 'block';
+        document.getElementById('plano_id').setAttribute('required', '');
+        document.getElementById('status').setAttribute('required', '');
+      } else {
+        planoFields.style.display = 'none';
+        document.getElementById('plano_id').removeAttribute('required');
+        document.getElementById('status').removeAttribute('required');
+      }
     });
   </script>
 </body>
