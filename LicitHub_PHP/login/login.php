@@ -37,7 +37,7 @@ try {
                 
                 // Redirecionar conforme tipo de usuário
                 if ($user['user_type'] === 'admin') {
-                    header("Location: ../inicial/inicial.php");
+                    header("Location: ../adm/dashboard.php");
                 } elseif ($user['user_type'] === 'employee') {
                     header("Location: inicial/inicial.php");
                 } else {

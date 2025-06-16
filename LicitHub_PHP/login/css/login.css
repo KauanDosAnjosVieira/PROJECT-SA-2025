@@ -119,11 +119,11 @@ input:focus {
 
 .toggle-password {
     position: absolute;
-    right: 10px;
-    top: 60%;
+    right: 54%;
+    top: 54%;
     transform: translateY(-50%);
-    width: 15px;
-    height: 15px;
+    width: 17px;
+    height: 17px;
     background-image: url('../icons/eye-close-up.png');
     background-size: cover;
     cursor: pointer;

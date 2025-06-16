@@ -101,6 +101,7 @@
     border: none;
     font-size: 16px;
   }
+
   
   .btn-primary {
     background-color: var(--primary-color);
@@ -156,7 +157,7 @@
   }
   
   .logo img {
-    height: 80px;
+    height: 70px;
   }
   
   .main-nav {
@@ -167,10 +168,11 @@
   .nav-links {
     display: flex;
     justify-content: center;
+    
   }
   
   .nav-links li {
-    margin: 0 15px;
+    margin: 5px 15px;
   }
   
   .nav-links a {
@@ -779,7 +781,7 @@
   }
   
   .cta .btn-primary:hover {
-    background-color: var(--secondary-color);
+    background-color: var(--dark-gray);
     color: var(--white);
   }
   

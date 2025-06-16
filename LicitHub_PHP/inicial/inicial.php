@@ -14,6 +14,25 @@ session_start();
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+  <style>
+    .btn-hover:hover {
+    background-color: #003d6e; /* Cor de fundo ao passar o mouse */
+    color: #ffffff; /* Cor do texto ao passar o mouse */
+  }
+  .btn-exit {
+    background-color:rgba(252, 0, 0, 0.53); /* Cor padrão do botão */
+    color: #ffffff; /* Cor do texto */
+    border: none; /* Remover borda */
+    padding: 10px 20px; /* Ajustar espaçamento */
+    border-radius: 5px; /* Bordas arredondadas */
+    text-decoration: none; /* Remover sublinhado */
+  }
+
+  .btn-exit:hover {
+    background-color: #b02a37; /* Cor ao passar o mouse */
+    color: #ffffff; /* Cor do texto ao passar o mouse */
+  }
+  </style>
 </head>
 <body>
   <!-- Header -->
@@ -38,9 +57,9 @@ session_start();
       <?php if(isset($_SESSION['user_id'])): ?>
         <!-- Se o usuário estiver logado -->
         <?php if($_SESSION['user_type'] === 'admin'): ?>
-          <a href="../adm/dashboard.php" class="btn btn-primary">Dashboard Admin</a>
+          <a href="../adm/dashboard.php" class="btn btn-sucess active btn-hover">Dashboard Admin</a>
         <?php endif; ?>
-        <a href="logout.php" class="btn btn-outline">Sair</a>
+        <a href="logout.php" class="btn btn-sucess active btn-exit">Sair</a>
       <?php else: ?>
         <!-- Se o usuário não estiver logado -->
         <a href="../login/login.php" class="btn btn-outline">Entrar</a>
@@ -120,16 +139,15 @@ session_start();
     </div>
   </section>
 
-  <!-- Counter Section -->
   <section class="counter-section">
     <div class="container">
       <div class="counter-grid">
         <div class="counter-item">
-          <div class="counter-number" data-count="123">0</div>
+          <div class="counter-number" data-count="112">0</div>
           <div class="counter-text">Licitações diárias</div>
         </div>
         <div class="counter-item">
-          <div class="counter-number" data-count="1627">0</div>
+          <div class="counter-number" data-count="1627">  </div>
           <div class="counter-text">Clientes satisfeitos</div>
         </div>
         <div class="counter-item">
@@ -287,8 +305,9 @@ session_start();
         <p>Conte com suporte estratégico para análise de licitações e montagem de propostas.</p>
       </div>
     </div>
+  </style>
     <div class="text-center mt-5">
-      <a href="#planos" class="btn btn-primary btn-lg">Quero Acessar</a>
+      <a href="#planos" class="btn btn-sucess active btn-lg btn-hover">Quero Acessar</a>
     </div>
   </div>
 </section>
