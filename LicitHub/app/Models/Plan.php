@@ -22,7 +22,7 @@ class Plan extends Model
         'price' => 'decimal:2',
         'trial_days' => 'integer',
         'is_active' => 'boolean',
-        'features' => 'array'
+        "features" => "array",
     ];
 
     public function subscriptions()

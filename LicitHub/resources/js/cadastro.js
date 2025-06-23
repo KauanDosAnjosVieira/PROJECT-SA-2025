@@ -1,17 +1,17 @@
-// cadastro.js
-
-function togglePasswordVisibility(fieldId) {
-    const passwordField = document.getElementById(fieldId);
-    const toggleIcon = passwordField.nextElementSibling;
+ // Função para mostrar/esconder senha
+ function togglePasswordVisibility() {
+    const passwordField = document.getElementById('password');
+    const toggleIcon = document.querySelector('.toggle-password');
     
     if (passwordField.type === "password") {
-        passwordField.type = "text";
-        toggleIcon.classList.add("visible");
+      passwordField.type = "text";
+      toggleIcon.classList.add("visible");
     } else {
-        passwordField.type = "password";
-        toggleIcon.classList.remove("visible");
+      passwordField.type = "password";
+      toggleIcon.classList.remove("visible");
     }
-}
+  }
+
 
 // Validação do formulário no lado do cliente
 document.getElementById('register-form').addEventListener('submit', function(e) {

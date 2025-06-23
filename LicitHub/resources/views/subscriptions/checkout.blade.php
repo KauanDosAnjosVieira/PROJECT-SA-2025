@@ -89,5 +89,5 @@
         }
     });
 </script>
-@endpush
+@endpush    
 @endsection

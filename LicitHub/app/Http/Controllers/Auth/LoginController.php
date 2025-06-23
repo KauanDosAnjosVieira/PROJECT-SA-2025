@@ -31,7 +31,7 @@ class LoginController extends Controller
             } elseif ($user->user_type === 'employee') {
                 return redirect()->intended('/employee/dashboard');
             } else {
-                return redirect()->intended('/dashboard');
+                return redirect()->intended('/client/dashboard'); // Mudança aqui
             }
         }
 

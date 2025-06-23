@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Plan;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -13,16 +14,19 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
+        // Remova esse middleware se quiser que o site seja acessível sem login
+        // $this->middleware('auth');
     }
 
     /**
-     * Show the application dashboard.
+     * Show the application homepage.
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function index()
     {
-        return view('home');
+        $plans = Plan::where('is_active', true)->orderBy('price')->get();
+
+        return view('site.home', compact('plans'));
     }
 }
