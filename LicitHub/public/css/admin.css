@@ -26,6 +26,25 @@
   --box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
   --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
+.feature-input-group {
+  transition: all 0.3s ease;
+}
+
+.remove-feature {
+  transition: opacity 0.3s ease;
+}
+
+.remove-feature:hover {
+  opacity: 0.8;
+}
+
+#add-feature-btn {
+  transition: all 0.2s ease;
+}
+
+#add-feature-btn:hover {
+  transform: translateY(-2px);
+}
 
 /* ================ DARK MODE VARIABLES ================ */
 .dark-mode {
@@ -66,8 +85,6 @@ html {
   font-size: 16px;
   height: 100%;
 }
-
-
 
 body {
   font-family: 'Inter', 'Plus Jakarta Sans', sans-serif;

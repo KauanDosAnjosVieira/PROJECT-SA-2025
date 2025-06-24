@@ -1,61 +1,447 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ config('app.name', 'Laravel') }} - Admin</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="{{ asset('css/admin.css' ) }}">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Admin Dashboard | Sistema de Gerenciamento</title>
+    
+    <!-- Fontes e Ícones -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Assets -->
+    @vite(['resources/css/admin.css'])
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/images/favicon.png">
+    
+    <!-- Meta Tags -->
+    <meta name="description" content="Painel administrativo completo para gerenciamento de clientes, produtos e pedidos">
 </head>
-<body>
-    @if(auth()->user()->user_type !== 'customer')
-    <nav class="navbar navbar-expand-md navbar-dark bg-dark">
-        <div class="container">
-            <a class="navbar-brand" href="{{ route('admin.dashboard') }}">{{ config('app.name', 'Laravel') }} Admin</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+<body class="dark-mode">
+    <div class="admin-container">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <span class="logo-text">Licit <span class="logo-highlight">Admin</span></span>
+                </div>
+                <button class="sidebar-close" id="sidebar-close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
             
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('admin.dashboard') }}">Dashboard</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('clients.index') }}">Clientes</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('admin.chat') }}">Chat</a>
-                    </li>
-                </ul>
-                
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
-                            {{ Auth::user()->name }}
+            <div class="sidebar-menu">
+                <ul>
+                    <li class="menu-title">PRINCIPAL</li>
+                    <li class="menu-item active">
+                        <a href="{{ route('admin.dashboard') }}">
+                            <div class="menu-icon">
+                                <i class="fas fa-tachometer-alt"></i>
+                            </div>
+                            <span class="menu-text">Dashboard</span>
                         </a>
-                        <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" href="{{ route('profile.edit') }}">Perfil</a></li>
-                            <li><hr class="dropdown-divider"></li>
+                    </li>
+                    
+                    <li class="menu-title">GERENCIAMENTO</li>
+                    <li class="menu-item">
+                        <a href="{{ route('clients.index') }}">
+                            <div class="menu-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <span class="menu-text">Clientes</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="{{ route('plans.index') }}">
+                            <div class="menu-icon">
+                                <i class="fas fa-box"></i>
+                            </div>
+                            <span class="menu-text">Planos</span>
+                        </a>
+                    </li>
+                    <li class="menu-item has-submenu">
+                        <a href="#">
+                            <div class="menu-icon">
+                                <i class="fas fa-file-invoice-dollar"></i>
+                            </div>
+                            <span class="menu-text">Pedidos</span>
+                            <div class="menu-arrow">
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                        </a>
+                        <ul class="submenu">
                             <li>
-                                <form method="POST" action="{{ route('logout') }}">
-                                    @csrf
-                                    <button type="submit" class="dropdown-item">Sair</button>
-                                </form>
+                                <a href="#">
+                                    <span class="submenu-text">Novos Pedidos</span>
+                                    <span class="submenu-badge">{{ $
+                                        
+                                    }}</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <span class="submenu-text">Completos</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <span class="submenu-text">Cancelados</span>
+                                </a>
                             </li>
                         </ul>
                     </li>
+                    <li class="menu-item">
+                        <a href="#">
+                            <div class="menu-icon">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <span class="menu-text">Relatórios</span>
+                        </a>
+                    </li>
+                    
+                    <li class="menu-title">SISTEMA</li>
+                    <li class="menu-item">
+                        <a href="#">
+                            <div class="menu-icon">
+                                <i class="fas fa-cog"></i>
+                            </div>
+                            <span class="menu-text">Configurações</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="{{ route('admins.index') }}">
+                            <div class="menu-icon">
+                                <i class="fas fa-user-shield"></i>
+                            </div>
+                            <span class="menu-text">Administradores</span>
+                        </a>
+                    </li>
                 </ul>
             </div>
-        </div>
-    </nav>
-    @endif
-    <main class="py-4">
-        @yield('content')
-    </main>
-    
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="{{ asset('js/admin.js' ) }}"></script>
+            
+            <div class="sidebar-footer">
+                <div class="user-panel">
+                    <div class="user-avatar">
+                        <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&background=random" alt="{{ Auth::user()->name }}">
+                    </div>
+                    <div class="user-info">
+                        <span class="user-name">{{ Auth::user()->name }}</span>
+                        <span class="user-role">{{ Auth::user()->user_type }}</span>
+                    </div>
+                </div>
+                
+                <form method="POST" action="{{ route('logout') }}" class="logout-form">
+                    @csrf
+                    <button type="submit" class="logout-btn">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>Sair</span>
+                    </button>
+                </form>
+            </div>
+        </aside>
+        
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="main-header">
+                <div class="header-left">
+                    <button class="sidebar-toggle" id="sidebar-toggle">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <div class="header-title">
+                        <h1>Dashboard</h1>
+                    </div>
+                </div>
+                <div class="header-right">
+                    <div class="header-actions">
+                        <button class="theme-toggle" id="theme-toggle">
+                            <i class="fas fa-moon"></i>
+                            <i class="fas fa-sun"></i>
+                        </button>
+                        
+                        <div class="header-profile">
+                            <div class="profile-avatar">
+                                <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&background=random" alt="{{ Auth::user()->name }}">
+                            </div>
+                            <div class="profile-dropdown">
+                                <div class="profile-header">
+                                    <div class="profile-info">
+                                        <h4>{{ Auth::user()->name }}</h4>
+                                        <span>{{ Auth::user()->user_type }}</span>
+                                    </div>
+                                </div>
+                                <div class="profile-links">
+                                    <a href="{{ route('profile.edit') }}">
+                                        <i class="fas fa-user"></i>
+                                        <span>Meu Perfil</span>
+                                    </a>
+                                    <a href="#">
+                                        <i class="fas fa-cog"></i>
+                                        <span>Configurações</span>
+                                    </a>
+                                </div>
+                                <form method="POST" action="{{ route('logout') }}" class="profile-logout">
+                                    @csrf
+                                    <button type="submit">
+                                        <i class="fas fa-sign-out-alt"></i>
+                                        <span>Sair</span>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+            
+            <div class="content-wrapper">
+                <div class="dashboard-overview">
+                    <div class="cards-grid">
+                        <div class="card">
+                            <div class="card-icon bg-gradient-blue">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <div class="card-info">
+                                <h3>Total de Clientes</h3>
+                                <span>{{ $totalClients }}</span>
+                                <div class="card-trend {{ $clientGrowth >= 0 ? 'up' : 'down' }}">
+                                    <i class="fas fa-arrow-{{ $clientGrowth >= 0 ? 'up' : 'down' }}"></i>
+                                    <span>{{ abs($clientGrowth) }}%</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-icon bg-gradient-green">
+                                <i class="fas fa-shopping-cart"></i>
+                            </div>
+                            <div class="card-info">
+                                <h3>Pedidos Hoje</h3>
+                                <span>{{ $todayOrders }}</span>
+                                <div class="card-trend {{ $orderGrowth >= 0 ? 'up' : 'down' }}">
+                                    <i class="fas fa-arrow-{{ $orderGrowth >= 0 ? 'up' : 'down' }}"></i>
+                                    <span>{{ abs($orderGrowth) }}%</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-icon bg-gradient-orange">
+                                <i class="fas fa-dollar-sign"></i>
+                            </div>
+                            <div class="card-info">
+                                <h3>Receita Total</h3>
+                                <span>R$ {{ number_format($totalRevenue, 2, ',', '.') }}</span>
+                                <div class="card-trend {{ $revenueGrowth >= 0 ? 'up' : 'down' }}">
+                                    <i class="fas fa-arrow-{{ $revenueGrowth >= 0 ? 'up' : 'down' }}"></i>
+                                    <span>{{ abs($revenueGrowth) }}%</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-icon bg-gradient-purple">
+                                <i class="fas fa-chart-pie"></i>
+                            </div>
+                            <div class="card-info">
+                                <h3>Crescimento</h3>
+                                <span>+{{ $growthRate }}%</span>
+                                <div class="card-trend {{ $growthRate >= 0 ? 'up' : 'down' }}">
+                                    <i class="fas fa-arrow-{{ $growthRate >= 0 ? 'up' : 'down' }}"></i>
+                                    <span>{{ abs($growthRate) }}%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="dashboard-content">
+                        <div class="content-section">
+                            <div class="section-header">
+                                <h2>Atividade Recente</h2>
+                                <div class="section-actions">
+                                    <div class="section-filter">
+                                        <select class="form-select" id="activityFilter">
+                                            <option value="today">Hoje</option>
+                                            <option value="week" selected>Esta Semana</option>
+                                            <option value="month">Este Mês</option>
+                                            <option value="year">Este Ano</option>
+                                        </select>
+                                    </div>
+                                    <a href="#" class="btn btn-link">Ver Tudo</a>
+                                </div>
+                            </div>
+                            <div class="section-content">
+                                <div class="activity-list">
+                                    @foreach($recentActivities as $activity)
+                                    <div class="activity-item">
+                                        <div class="activity-icon bg-{{ $activity['color'] }}">
+                                            <i class="fas fa-{{ $activity['icon'] }}"></i>
+                                        </div>
+                                        <div class="activity-content">
+                                            <p><strong>{{ $activity['title'] }}</strong> {{ $activity['description'] }}</p>
+                                            <span class="activity-time">{{ $activity['time'] }}</span>
+                                        </div>
+                                        @if(isset($activity['amount']))
+                                        <div class="activity-amount">
+                                            {{ $activity['amount'] }}
+                                        </div>
+                                        @endif
+                                    </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="content-section">
+                            <div class="section-header">
+                                <h2>Visão Geral das Vendas</h2>
+                                <div class="section-actions">
+                                    <div class="section-filter">
+                                        <select class="form-select" id="salesFilter">
+                                            <option value="daily">Diário</option>
+                                            <option value="weekly" selected>Semanal</option>
+                                            <option value="monthly">Mensal</option>
+                                            <option value="yearly">Anual</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="section-content">
+                                <div class="chart-container">
+                                    <canvas id="salesChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Toggle Sidebar
+            const sidebar = document.getElementById('sidebar');
+            const toggleBtn = document.getElementById('sidebar-toggle');
+            const closeBtn = document.getElementById('sidebar-close');
+            
+            toggleBtn.addEventListener('click', function() {
+                sidebar.classList.toggle('collapsed');
+                document.querySelector('.main-content').classList.toggle('expanded');
+            });
+            
+            closeBtn.addEventListener('click', function() {
+                sidebar.classList.add('collapsed');
+                document.querySelector('.main-content').classList.add('expanded');
+            });
+            
+            // Submenu toggle
+            const submenuItems = document.querySelectorAll('.has-submenu > a');
+            submenuItems.forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const submenu = this.nextElementSibling;
+                    const parent = this.parentElement;
+                    
+                    parent.classList.toggle('open');
+                    submenu.style.maxHeight = parent.classList.contains('open') 
+                        ? submenu.scrollHeight + 'px' 
+                        : '0';
+                });
+            });
+            
+            // Theme Toggle
+            const themeToggle = document.getElementById('theme-toggle');
+            themeToggle.addEventListener('click', function() {
+                document.body.classList.toggle('dark-mode');
+                
+                if (document.body.classList.contains('dark-mode')) {
+                    localStorage.setItem('theme', 'dark');
+                } else {
+                    localStorage.setItem('theme', 'light');
+                }
+            });
+            
+            // Check for saved theme preference
+            if (localStorage.getItem('theme') === 'dark') {
+                document.body.classList.add('dark-mode');
+            }
+            
+            // Initialize Chart with real data
+            const ctx = document.getElementById('salesChart').getContext('2d');
+            const salesChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: @json($salesData['labels']),
+                    datasets: [{
+                        label: 'Vendas ' + new Date().getFullYear(),
+                        data: @json($salesData['data']),
+                        backgroundColor: 'rgba(54, 162, 235, 0.1)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 2,
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false,
+                            callbacks: {
+                                label: function(context) {
+                                    return 'R$ ' + context.raw.toLocaleString('pt-BR');
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return 'R$ ' + value.toLocaleString('pt-BR');
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // Filter activities
+            document.getElementById('activityFilter').addEventListener('change', function() {
+                // Aqui você faria uma requisição AJAX para filtrar as atividades
+                // ou recarregaria a página com o novo filtro
+                console.log('Filtrar atividades por:', this.value);
+            });
+            
+            // Filter sales
+            document.getElementById('salesFilter').addEventListener('change', function() {
+                // Aqui você faria uma requisição AJAX para filtrar os dados de vendas
+                // ou recarregaria a página com o novo filtro
+                console.log('Filtrar vendas por:', this.value);
+            });
+            
+            // Profile dropdown
+            const profileAvatar = document.querySelector('.profile-avatar');
+            const profileDropdown = document.querySelector('.profile-dropdown');
+            
+            profileAvatar.addEventListener('click', function(e) {
+                e.stopPropagation();
+                profileDropdown.classList.toggle('show');
+            });
+            
+            // Close dropdowns when clicking outside
+            document.addEventListener('click', function() {
+                profileDropdown.classList.remove('show');
+            });
+        });
+    </script>
 </body>
 </html>

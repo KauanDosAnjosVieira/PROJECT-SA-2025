@@ -14,6 +14,7 @@ session_start();
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
   <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </head>
 <body>
@@ -183,29 +184,31 @@ session_start();
   </section>
 
   <!-- Pricing Section - Substituída pelo conteúdo fornecido -->
-  <section class="pricing py-5" id="planos">
+  <section class="pricing py-5 bg-light" id="planos">
     <div class="container">
         <div class="text-center mb-5">
-            <h2>Planos e Preços</h2>
+            <h2 class="fw-bold">Planos e Preços</h2>
             <p class="text-muted">Escolha o plano que melhor se adapta à sua empresa</p>
         </div>
 
-        <div class="row">
+        <div class="row justify-content-center">
             @foreach ($plans as $plan)
                 <div class="col-md-6 col-lg-4 mb-4">
-                    <div class="card h-100 shadow-sm {{ $loop->iteration === 2 ? 'border-primary' : '' }}">
+                    <div class="card h-100 border-0 shadow-lg position-relative {{ $loop->iteration === 2 ? 'highlighted-plan' : '' }}">
+                        
                         @if ($loop->iteration === 2)
-                            <div class="ribbon bg-primary text-white text-center py-1">Mais Popular</div>
+                            <div class="ribbon-top bg-primary text-white fw-bold">Mais Popular</div>
                         @endif
 
-                        <div class="card-body d-flex flex-column">
-                            <h5 class="card-title">{{ $plan->name }}</h5>
-                            <h6 class="card-price text-primary mb-3">
+                        <div class="card-body d-flex flex-column p-4">
+                            <h5 class="card-title text-center fw-semibold mb-3">{{ $plan->name }}</h5>
+                            
+                            <h6 class="card-price text-center text-primary mb-4 fs-4">
                                 R${{ number_format($plan->price, 2, ',', '.') }}
-                                <small class="text-muted">/{{ $plan->interval === 'year' ? 'ano' : 'mês' }}</small>
+                                <small class="text-muted fs-6">/{{ $plan->interval === 'year' ? 'ano' : 'mês' }}</small>
                             </h6>
 
-                            <ul class="list-unstyled mb-4 flex-grow-1">
+                            <ul class="list-unstyled mb-4 flex-grow-1 px-2">
                                 @php
                                     $features = is_array($plan->features) ? $plan->features : explode("\n", $plan->features);
                                 @endphp
@@ -214,13 +217,15 @@ session_start();
                                         $feature = trim($feature);
                                         $isDisabled = str_starts_with($feature, '-');
                                     @endphp
-                                    <li class="{{ $isDisabled ? 'text-muted text-decoration-line-through' : '' }}">
-                                        {{ $isDisabled ? ltrim($feature, '-') : $feature }}
+                                    <li class="mb-2 d-flex align-items-start {{ $isDisabled ? 'text-muted text-decoration-line-through' : '' }}">
+                                        <i class="me-2 {{ $isDisabled ? 'bi-x-circle' : 'bi-check-circle text-success' }}"></i>
+                                        <span>{{ $isDisabled ? ltrim($feature, '-') : $feature }}</span>
                                     </li>
                                 @endforeach
                             </ul>
 
-                            <a href="{{ route('register') }}" class="btn {{ $loop->iteration === 2 ? 'btn-primary' : 'btn-outline-primary' }} mt-auto">
+                            <a href="{{ route('register') }}"
+                               class="btn {{ $loop->iteration === 2 ? 'btn-primary' : 'btn-outline-primary' }} mt-auto w-100 fw-bold">
                                 Escolher Plano
                             </a>
                         </div>
@@ -229,7 +234,8 @@ session_start();
             @endforeach
         </div>
     </div>
-  </section>
+</section>
+
 
   <!-- Licitações Exclusivas -->
 <section class="licitacoes" id="licitacoes">
