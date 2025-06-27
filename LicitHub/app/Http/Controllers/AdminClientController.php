@@ -9,12 +9,22 @@ use Illuminate\Support\Facades\Hash; // Adicione este import
 class AdminClientController extends Controller
 {
     // Método para listar clientes
-    public function index()
-    {
-        $clients = User::where("user_type", "customer")->paginate(10); // Paginação opcional
-        return view("admin.clients.index", compact("clients"));
-    }
+    public function index(Request $request)
+{
+    $search = $request->input('search');
+    
+    $clients = User::where('user_type', 'customer')
+        ->when($search, function ($query, $search) {
+            return $query->where(function($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('email', 'like', "%{$search}%");
+            });
+        })
+        ->orderBy('created_at', 'desc')
+        ->paginate(10);
 
+    return view('admin.clients.index', compact('clients'));
+}
     // Método para mostrar o formulário de criação
     public function create()
     {

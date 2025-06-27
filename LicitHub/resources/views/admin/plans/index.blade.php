@@ -57,6 +57,14 @@
                             <span class="menu-text">Clientes</span>
                         </a>
                     </li>
+                    <li class="menu-item">
+                        <a href="{{ route('admins.index') }}">
+                            <div class="menu-icon">
+                                <i class="fas fa-user-shield"></i>
+                            </div>
+                            <span class="menu-text">Administradores</span>
+                        </a>
+                    </li>
                     <li class="menu-item active">
                         <a href="{{ route('plans.index') }}">
                             <div class="menu-icon">
@@ -65,7 +73,7 @@
                             <span class="menu-text">Planos</span>
                         </a>
                     </li>
-                    <li class="menu-item has-submenu">
+                    <!--<li class="menu-item has-submenu">
                         <a href="#">
                             <div class="menu-icon">
                                 <i class="fas fa-file-invoice-dollar"></i>
@@ -93,7 +101,7 @@
                                 </a>
                             </li>
                         </ul>
-                    </li>
+                    </li>-->
                     <li class="menu-item">
                         <a href="#">
                             <div class="menu-icon">
@@ -103,7 +111,7 @@
                         </a>
                     </li>
                     
-                    <li class="menu-title">SISTEMA</li>
+                    <!--<li class="menu-title">SISTEMA</li>
                     <li class="menu-item">
                         <a href="#">
                             <div class="menu-icon">
@@ -111,15 +119,8 @@
                             </div>
                             <span class="menu-text">Configurações</span>
                         </a>
-                    </li>
-                    <li class="menu-item">
-                        <a href="{{ route('admins.index') }}">
-                            <div class="menu-icon">
-                                <i class="fas fa-user-shield"></i>
-                            </div>
-                            <span class="menu-text">Administradores</span>
-                        </a>
-                    </li>
+                    </li>-->
+                    
                 </ul>
             </div>
             
@@ -152,10 +153,12 @@
                         <i class="fas fa-bars"></i>
                     </button>
                     <div class="header-title">
-                        <h1>@yield('page-title', 'Dashboard')</h1>
+                        <h1>@yield('page-title', 'Gerenciamento de Planos')</h1>
                     </div>
+                    
                 </div>
                 <div class="header-right">
+                    
                     <div class="header-actions">
                         <button class="theme-toggle" id="theme-toggle">
                             <i class="fas fa-moon"></i>
@@ -195,13 +198,22 @@
                     </div>
                 </div>
             </header>
-            
+            <div class="header-actions">
+                        <a href="{{ route('plans.create') }}" class="btn btn-success">
+                            <i class="fas fa-plus-circle"></i> Adicionar Plano
+                        </a>
+                    </div>
             <div class="content-wrapper">
+                
                 @yield('content')
+                
                 <div class="card">
+                    
         <div class="card-body">
+            
             <div class="table-responsive">
                 <table class="table table-hover">
+                    
                     <thead class="thead-light">
                         <tr>
                             <th>ID</th>

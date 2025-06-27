@@ -37,9 +37,30 @@ class User extends Authenticatable
         return $this->hasMany(Subscription::class);
     }
 
+    public function cashierSubscriptions()
+{
+    return $this->hasMany(\App\Models\CashierSubscription::class);
+}
+
     public function payments()
     {
         return $this->hasMany(Payment::class);
+    }
+
+    public function hasActiveCashierSubscription()
+{
+    return $this->cashierSubscriptions()
+        ->where('stripe_status', 'active')
+        ->where(function($query) {
+            $query->whereNull('ends_at')
+                  ->orWhere('ends_at', '>', now());
+        })
+        ->exists();
+}
+
+    public function noCashierSubscription()
+    {
+        return ! $this->cashierSubscriptions()->exists();
     }
 
     public function roles()
@@ -48,8 +69,8 @@ class User extends Authenticatable
     }
 
     public function sendPasswordResetNotification($token)
-{
-    $this->notify(new CustomResetPassword($token));
-}
+    {
+        $this->notify(new CustomResetPassword($token));
+    }
 }
 

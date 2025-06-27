@@ -15,6 +15,7 @@ class Plan extends Model
         'interval',
         'is_active',
         'features',
+        'features_off',
         'stripe_price_id'  
     ];
 

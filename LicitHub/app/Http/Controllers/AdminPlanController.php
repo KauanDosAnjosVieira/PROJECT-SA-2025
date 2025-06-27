@@ -22,34 +22,37 @@ class AdminPlanController extends Controller
 
     // Armazenar novo plano
     public function store(Request $request)
-    {
-        $request->validate([
-            "name" => "required|string|max:255|unique:plans",
-            "slug" => "required|string|max:255|unique:plans",
-            "description" => "nullable|string",
-            "price" => "required|numeric|min:0",
-            "trial_days" => "nullable|integer|min:0",
-            "interval" => "required|in:month,year",
-            "is_active" => "boolean",
-            "features" => "nullable|array",
-            "stripe_price_id" => "nullable|string"
-        ]);
+{
+    $request->validate([
+        "name" => "required|string|max:255|unique:plans",
+        "slug" => "required|string|max:255|unique:plans",
+        "description" => "nullable|string",
+        "price" => "required|numeric|min:0",
+        "trial_days" => "nullable|integer|min:0",
+        "interval" => "required|in:month,year",
+        "is_active" => "boolean",
+        "features" => "nullable|array",
+        "features_off" => "nullable|array",
+        "stripe_price_id" => "nullable|string"
+    ]);
 
-        Plan::create([
-            "name" => $request->name,
-            "slug" => $request->slug,
-            "description" => $request->description,
-            "price" => $request->price,
-            "trial_days" => $request->trial_days ?? 0,
-            "interval" => $request->interval,
-            "is_active" => $request->is_active ?? true,
-            "features" => $request->features,
-            "stripe_price_id" => $request->stripe_price_id
-        ]);
+    Plan::create([
+        "name" => $request->name,
+        "slug" => $request->slug,
+        "description" => $request->description,
+        "price" => $request->price,
+        "trial_days" => $request->trial_days ?? 0,
+        "interval" => $request->interval,
+        "is_active" => $request->is_active ?? true,
+        "features" => json_encode($request->features ?? []),
+        "features_off" => json_encode($request->features_off ?? []),
+        "stripe_price_id" => $request->stripe_price_id
+    ]);
 
-        return redirect()->route("plans.index")
-            ->with("success", "Plano criado com sucesso.");
-    }
+    return redirect()->route("plans.index")
+        ->with("success", "Plano criado com sucesso.");
+}
+
 
     // Mostrar detalhes de um plano
     public function show(Plan $plan)
@@ -75,6 +78,7 @@ class AdminPlanController extends Controller
             "interval" => "required|in:month,year",
             "is_active" => "boolean",
             "features" => "nullable|array",
+            "features_off" => "nullable|array", // <-- faltava isso
             "stripe_price_id" => "nullable|string"
         ]);
 
@@ -86,7 +90,8 @@ class AdminPlanController extends Controller
             "trial_days" => $request->trial_days ?? $plan->trial_days,
             "interval" => $request->interval,
             "is_active" => $request->is_active ?? $plan->is_active,
-            "features" => $request->features ?? $plan->features,
+            "features" => json_encode($request->features ?? []), // <-- sempre encode arrays
+            "features_off" => json_encode($request->features_off ?? []),
             "stripe_price_id" => $request->stripe_price_id ?? $plan->stripe_price_id
         ]);
 

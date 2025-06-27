@@ -57,6 +57,14 @@
                         </a>
                     </li>
                     <li class="menu-item">
+                        <a href="{{ route('admins.index') }}">
+                            <div class="menu-icon">
+                                <i class="fas fa-user-shield"></i>
+                            </div>
+                            <span class="menu-text">Administradores</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
                         <a href="{{ route('plans.index') }}">
                             <div class="menu-icon">
                                 <i class="fas fa-box"></i>
@@ -64,7 +72,7 @@
                             <span class="menu-text">Planos</span>
                         </a>
                     </li>
-                    <li class="menu-item has-submenu">
+                    <!--<li class="menu-item has-submenu">
                         <a href="#">
                             <div class="menu-icon">
                                 <i class="fas fa-file-invoice-dollar"></i>
@@ -91,7 +99,7 @@
                                 </a>
                             </li>
                         </ul>
-                    </li>
+                    </li>-->
                     <li class="menu-item">
                         <a href="#">
                             <div class="menu-icon">
@@ -101,7 +109,7 @@
                         </a>
                     </li>
                     
-                    <li class="menu-title">SISTEMA</li>
+                    <!--<li class="menu-title">SISTEMA</li>
                     <li class="menu-item">
                         <a href="#">
                             <div class="menu-icon">
@@ -109,15 +117,8 @@
                             </div>
                             <span class="menu-text">Configurações</span>
                         </a>
-                    </li>
-                    <li class="menu-item">
-                        <a href="{{ route('admins.index') }}">
-                            <div class="menu-icon">
-                                <i class="fas fa-user-shield"></i>
-                            </div>
-                            <span class="menu-text">Administradores</span>
-                        </a>
-                    </li>
+                    </li>-->
+                    
                 </ul>
             </div>
             
@@ -198,8 +199,34 @@
                         </div>
                     </div>
                 </div>
+                
             </header>
             
+            <div class="card">
+    <!--PESQUISAR CLIENTE, ALTERAVEL E ESCALAVEL-->
+    <div class="card-body">
+        <div class="search-container mb-4">
+            <form action="{{ route('clients.index') }}" method="GET">
+                <div class="input-group">
+                    <input type="text" 
+                           name="search" 
+                           class="form-control" 
+                           placeholder="Pesquisar clientes..." 
+                           value="{{ request('search') }}">
+                    <div class="input-group-append">
+                        <button class="btn btn-primary" type="submit">
+                            <i class="fas fa-search"></i> Pesquisar
+                        </button>
+                        @if(request('search'))
+                            <a href="{{ route('clients.index') }}" class="btn btn-outline-secondary">
+                                <i class="fas fa-times"></i> Limpar
+                            </a>
+                        @endif
+                    </div>
+                </div>
+            </form>
+        </div>
+
             <div class="clients-management">
     <div class="page-header">
         <h2 class="page-title"></h2>
@@ -208,6 +235,7 @@
                 <i class="fas fa-plus-circle"></i> Adicionar Cliente
             </a>
         </div>
+        
         
         @if (session('success'))
             <div class="alert alert-success">

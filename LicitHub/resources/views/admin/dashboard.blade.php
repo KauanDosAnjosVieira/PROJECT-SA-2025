@@ -1,3 +1,11 @@
+@php
+    $user = auth()->user();
+    if (!($user->user_type === 'admin')) {
+        header('Location: ' . url('/'));
+        exit;
+    }
+@endphp
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -59,6 +67,14 @@
                         </a>
                     </li>
                     <li class="menu-item">
+                        <a href="{{ route('admins.index') }}">
+                            <div class="menu-icon">
+                                <i class="fas fa-user-shield"></i>
+                            </div>
+                            <span class="menu-text">Administradores</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
                     <a href="{{ route('plans.index') }}">
                             <div class="menu-icon">
                                 <i class="fas fa-box"></i>
@@ -66,7 +82,7 @@
                             <span class="menu-text">Planos</span>
                         </a>
                     </li>
-                    <li class="menu-item has-submenu">
+                    <!--<li class="menu-item has-submenu">
                         <a href="#">
                             <div class="menu-icon">
                                 <i class="fas fa-file-invoice-dollar"></i>
@@ -94,7 +110,7 @@
                                 </a>
                             </li>
                         </ul>
-                    </li>
+                    </li>-->
                     <li class="menu-item">
                         <a href="#">
                             <div class="menu-icon">
@@ -104,7 +120,7 @@
                         </a>
                     </li>
                     
-                    <li class="menu-title">SISTEMA</li>
+                    <!--<li class="menu-title">SISTEMA</li>
                     <li class="menu-item">
                         <a href="#">
                             <div class="menu-icon">
@@ -112,15 +128,8 @@
                             </div>
                             <span class="menu-text">Configurações</span>
                         </a>
-                    </li>
-                    <li class="menu-item">
-                        <a href="{{ route('admins.index') }}">
-                            <div class="menu-icon">
-                                <i class="fas fa-user-shield"></i>
-                            </div>
-                            <span class="menu-text">Administradores</span>
-                        </a>
-                    </li>
+                    </li>-->
+                    
                 </ul>
             </div>
             
@@ -185,10 +194,10 @@
                                         <i class="fas fa-user"></i>
                                         <span>Meu Perfil</span>
                                     </a>
-                                    <a href="#">
+                                    <!--<a href="#">
                                         <i class="fas fa-cog"></i>
                                         <span>Configurações</span>
-                                    </a>
+                                    </a>-->
                                 </div>
                                 <form method="POST" action="{{ route('logout') }}" class="profile-logout">
                                     @csrf

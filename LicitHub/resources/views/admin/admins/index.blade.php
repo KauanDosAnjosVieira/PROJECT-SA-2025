@@ -56,6 +56,14 @@
                             <span class="menu-text">Clientes</span>
                         </a>
                     </li>
+                    <li class="menu-item active">
+                        <a href="{{ route('admins.index') }}">
+                            <div class="menu-icon">
+                                <i class="fas fa-user-shield"></i>
+                            </div>
+                            <span class="menu-text">Administradores</span>
+                        </a>
+                    </li>
                     <li class="menu-item">
                     <a href="{{ route('plans.index') }}">
                             <div class="menu-icon">
@@ -64,7 +72,7 @@
                             <span class="menu-text">Planos</span>
                         </a>
                     </li>
-                    <li class="menu-item has-submenu">
+                    <!--<li class="menu-item has-submenu">
                         <a href="#">
                             <div class="menu-icon">
                                 <i class="fas fa-file-invoice-dollar"></i>
@@ -91,7 +99,7 @@
                                 </a>
                             </li>
                         </ul>
-                    </li>
+                    </li>-->
                     <li class="menu-item">
                         <a href="#">
                             <div class="menu-icon">
@@ -101,7 +109,7 @@
                         </a>
                     </li>
                     
-                    <li class="menu-title">SISTEMA</li>
+                    <!--<li class="menu-title">SISTEMA</li>
                     <li class="menu-item">
                         <a href="#">
                             <div class="menu-icon">
@@ -109,15 +117,8 @@
                             </div>
                             <span class="menu-text">Configurações</span>
                         </a>
-                    </li>
-                    <li class="menu-item active">
-                        <a href="{{ route('admins.index') }}">
-                            <div class="menu-icon">
-                                <i class="fas fa-user-shield"></i>
-                            </div>
-                            <span class="menu-text">Administradores</span>
-                        </a>
-                    </li>
+                    </li>-->
+                    
                 </ul>
             </div>
             
@@ -199,6 +200,30 @@
                     </div>
                 </div>
             </header>
+
+             <!--PESQUISAR ADMIN, ALTERAVEL E ESCALAVEL-->
+    <div class="card-body">
+        <div class="search-container mb-4">
+            <form action="{{ route('admins.index') }}" method="GET">
+                <div class="input-group">
+                    <input type="text" 
+                           name="search" 
+                           class="form-control" 
+                           placeholder="Pesquisar admins..." 
+                           value="{{ request('search') }}">
+                    <div class="input-group-append">
+                        <button class="btn btn-primary" type="submit">
+                            <i class="fas fa-search"></i> Pesquisar
+                        </button>
+                        @if(request('search'))
+                            <a href="{{ route('admins.index') }}" class="btn btn-outline-secondary">
+                                <i class="fas fa-times"></i> Limpar
+                            </a>
+                        @endif
+                    </div>
+                </div>
+            </form>
+        </div>
             
             <div class="clients-management">
     <div class="page-header">
@@ -290,70 +315,78 @@
     <!-- JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Toggle Sidebar
-            const sidebar = document.getElementById('sidebar');
-            const toggleBtn = document.getElementById('sidebar-toggle');
-            const closeBtn = document.getElementById('sidebar-close');
+     document.addEventListener('DOMContentLoaded', function() {
+    // Toggle Sidebar
+    const sidebar = document.getElementById('sidebar');
+    const toggleBtn = document.getElementById('sidebar-toggle');
+    const closeBtn = document.getElementById('sidebar-close');
+    
+    toggleBtn.addEventListener('click', function() {
+        sidebar.classList.toggle('collapsed');
+        document.querySelector('.main-content').classList.toggle('expanded');
+    });
+    
+    closeBtn.addEventListener('click', function() {
+        sidebar.classList.add('collapsed');
+        document.querySelector('.main-content').classList.add('expanded');
+    });
+    
+    // Submenu toggle
+    const submenuItems = document.querySelectorAll('.has-submenu > a');
+    submenuItems.forEach(item => {
+        item.addEventListener('click', function(e) {
+            e.preventDefault();
+            const submenu = this.nextElementSibling;
+            const parent = this.parentElement;
             
-            toggleBtn.addEventListener('click', function() {
-                sidebar.classList.toggle('collapsed');
-                document.querySelector('.main-content').classList.toggle('expanded');
-            });
-            
-            closeBtn.addEventListener('click', function() {
-                sidebar.classList.add('collapsed');
-                document.querySelector('.main-content').classList.add('expanded');
-            });
-            
-            // Submenu toggle
-            const submenuItems = document.querySelectorAll('.has-submenu > a');
-            submenuItems.forEach(item => {
-                item.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const submenu = this.nextElementSibling;
-                    const parent = this.parentElement;
-                    
-                    parent.classList.toggle('open');
-                    submenu.style.maxHeight = parent.classList.contains('open') 
-                        ? submenu.scrollHeight + 'px' 
-                        : '0';
-                });
-            });
-            
-            // Theme Toggle
-            const themeToggle = document.getElementById('theme-toggle');
-            themeToggle.addEventListener('click', function() {
-                document.body.classList.toggle('dark-mode');
-                
-                if (document.body.classList.contains('dark-mode')) {
-                    localStorage.setItem('theme', 'dark');
-                } else {
-                    localStorage.setItem('theme', 'light');
-                }
-            });
-            
-            // Check for saved theme preference
-            if (localStorage.getItem('theme') === 'dark') {
-                document.body.classList.add('dark-mode');
-            }
-            
-            
-            // Profile dropdown
-            const profileAvatar = document.querySelector('.profile-avatar');
-            const profileDropdown = document.querySelector('.profile-dropdown');
-            
-            profileAvatar.addEventListener('click', function(e) {
-                e.stopPropagation();
-                profileDropdown.classList.toggle('show');   
-            });
-            
-            // Close dropdowns when clicking outside
-            document.addEventListener('click', function() {
-                notificationDropdown.classList.remove('show');
-                profileDropdown.classList.remove('show');
-            });
+            parent.classList.toggle('open');
+            submenu.style.maxHeight = parent.classList.contains('open') 
+                ? submenu.scrollHeight + 'px' 
+                : '0';
         });
+    });
+    
+    // Theme Toggle
+    const themeToggle = document.getElementById('theme-toggle');
+    themeToggle.addEventListener('click', function() {
+        document.body.classList.toggle('dark-mode');
+        
+        if (document.body.classList.contains('dark-mode')) {
+            localStorage.setItem('theme', 'dark');
+        } else {
+            localStorage.setItem('theme', 'light');
+        }
+    });
+    
+    // Check for saved theme preference
+    if (localStorage.getItem('theme') === 'dark') {
+        document.body.classList.add('dark-mode');
+    }
+    
+    
+    // Profile dropdown
+    const profileAvatar = document.querySelector('.profile-avatar');
+    const profileDropdown = document.querySelector('.profile-dropdown');
+    
+    profileAvatar.addEventListener('click', function(e) {
+        e.stopPropagation();
+        profileDropdown.classList.toggle('show');   
+    });
+    
+    // Notification dropdown (se existir)
+    const notificationDropdown = document.querySelector('.notification-dropdown');
+    
+    // Close dropdowns when clicking outside
+    document.addEventListener('click', function() {
+        if (notificationDropdown) {
+            notificationDropdown.classList.remove('show');
+        }
+        if (profileDropdown) {
+            profileDropdown.classList.remove('show');
+        }
+    });
+});
+
     </script>
 </body>
 </html>

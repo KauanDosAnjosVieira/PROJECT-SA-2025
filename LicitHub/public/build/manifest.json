@@ -5,13 +5,18 @@
     "isEntry": true
   },
   "resources/css/app.css": {
-    "file": "assets/app-ynnDO8Lq.css",
+    "file": "assets/app-DpIJHa6c.css",
     "src": "resources/css/app.css",
     "isEntry": true
   },
   "resources/css/cadastro.css": {
     "file": "assets/cadastro-CSj8FqUd.css",
     "src": "resources/css/cadastro.css",
+    "isEntry": true
+  },
+  "resources/css/esqueceu.css": {
+    "file": "assets/esqueceu-B8R4qMYx.css",
+    "src": "resources/css/esqueceu.css",
     "isEntry": true
   },
   "resources/css/login.css": {

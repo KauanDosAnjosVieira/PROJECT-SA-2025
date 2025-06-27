@@ -13,15 +13,21 @@ class ChatMessage extends Model
         'from_user_id',
         'to_user_id',
         'message',
-        'read',
+        'is_read',
+        'read_at'
     ];
 
-    public function fromUser()
+    protected $casts = [
+        'is_read' => 'boolean',
+        'read_at' => 'datetime',
+    ];
+
+    public function sender()
     {
         return $this->belongsTo(User::class, 'from_user_id');
     }
 
-    public function toUser()
+    public function recipient()
     {
         return $this->belongsTo(User::class, 'to_user_id');
     }

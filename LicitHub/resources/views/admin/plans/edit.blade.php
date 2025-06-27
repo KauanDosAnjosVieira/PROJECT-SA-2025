@@ -1,144 +1,166 @@
-@extends('layouts.admin')
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Editar Plano</title>
+    @vite(['resources/css/admin.css'])
+</head>
+<body class="light-mode">
+    <main class="content-wrapper">
+        <div class="page-header">
+            <h1 class="page-title">Editar Plano: {{ $plan->name }}</h1>
+        </div>
 
-@section('content')
-<div class="card">
-    <div class="card-header">
-        <h3 class="card-title">Editar Plano: {{ $plan->name }}</h3>
-    </div>
-    <div class="card-body">
-        <form action="{{ route('plans.update', $plan) }}" method="POST">
+        <form action="{{ route('plans.update', $plan) }}" method="POST" style="max-width: 800px;">
             @csrf
             @method('PUT')
-            
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="name">Nome do Plano*</label>
-                        <input type="text" name="name" id="name" class="form-control" value="{{ $plan->name }}" required>
-                    </div>
-                </div>
-                
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="slug">Slug*</label>
-                        <input type="text" name="slug" id="slug" class="form-control" value="{{ $plan->slug }}" required>
-                        <small class="text-muted">Identificador único para o plano</small>
-                    </div>
-                </div>
+
+            <div class="form-group">
+                <label for="name">Nome do Plano*</label>
+                <input type="text" name="name" id="name" class="form-control" value="{{ $plan->name }}" required>
             </div>
-            
+
+            <div class="form-group">
+                <label for="slug">Slug*</label>
+                <input type="text" name="slug" id="slug" class="form-control" value="{{ $plan->slug }}" required>
+                <small class="text-muted">Identificador único (ex: plano-basico)</small>
+            </div>
+
             <div class="form-group">
                 <label for="description">Descrição</label>
                 <textarea name="description" id="description" class="form-control" rows="3">{{ $plan->description }}</textarea>
             </div>
-            
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <label for="price">Preço* (R$)</label>
-                        <input type="number" name="price" id="price" class="form-control" step="0.01" min="0" 
-                               value="{{ $plan->price }}" required>
-                    </div>
-                </div>
-                
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <label for="interval">Intervalo*</label>
-                        <select name="interval" id="interval" class="form-control" required>
-                            <option value="month" {{ $plan->interval == 'month' ? 'selected' : '' }}>Mensal</option>
-                            <option value="year" {{ $plan->interval == 'year' ? 'selected' : '' }}>Anual</option>
-                        </select>
-                    </div>
-                </div>
-                
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <label for="trial_days">Dias de Trial</label>
-                        <input type="number" name="trial_days" id="trial_days" class="form-control" min="0" 
-                               value="{{ $plan->trial_days }}">
-                    </div>
-                </div>
+
+            <div class="form-group">
+                <label for="price">Preço* (R$)</label>
+                <input type="number" name="price" id="price" class="form-control" step="0.01" min="0" value="{{ $plan->price }}" required>
             </div>
-            
+
+            <div class="form-group">
+                <label for="interval">Intervalo*</label>
+                <select name="interval" id="interval" class="form-control" required>
+                    <option value="month" {{ $plan->interval == 'month' ? 'selected' : '' }}>Mensal</option>
+                    <option value="year" {{ $plan->interval == 'year' ? 'selected' : '' }}>Anual</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="trial_days">Dias de Trial</label>
+                <input type="number" name="trial_days" id="trial_days" class="form-control" min="0" value="{{ $plan->trial_days }}">
+            </div>
+
             <div class="form-group">
                 <label for="stripe_price_id">ID do Preço no Stripe</label>
-                <input type="text" name="stripe_price_id" id="stripe_price_id" class="form-control" 
-                       value="{{ $plan->stripe_price_id }}">
+                <input type="text" name="stripe_price_id" id="stripe_price_id" class="form-control" value="{{ $plan->stripe_price_id }}">
             </div>
-            
+
             <div class="form-group">
-                <div class="custom-control custom-switch">
+                <label>
                     <input type="hidden" name="is_active" value="0">
-                    <input type="checkbox" class="custom-control-input" id="is_active" name="is_active" value="1" 
-                           {{ $plan->is_active ? 'checked' : '' }}>
-                    <label class="custom-control-label" for="is_active">Plano Ativo</label>
-                </div>
+                    <input type="checkbox" name="is_active" value="1" {{ $plan->is_active ? 'checked' : '' }}>
+                    Plano Ativo
+                </label>
             </div>
-            
+
+            {{-- FEATURES --}}
             <div class="form-group">
-                <label>Recursos do Plano</label>
+                <label>Recursos Ativos (features)</label>
                 <div id="features-container">
-                @php
-                    $features = is_array($plan->features) ? $plan->features : explode(',', $plan->features);
-                @endphp 
+                    @php
+                        $features = is_array($plan->features) ? $plan->features : json_decode($plan->features, true) ?? [];
+                    @endphp
 
-                @if(!empty($features) && count($features) > 0)
-                    @foreach($features as $feature)
-
-                            <div class="input-group mb-2">
-                                <input type="text" name="features[]" class="form-control" value="{{ $feature }}">
-                                <div class="input-group-append">
-                                    <button class="btn btn-outline-danger remove-feature" type="button">
-                                        <i class="fas fa-minus"></i>
-                                    </button>
-                                </div>
+                    @forelse ($features as $feature)
+                        <div class="input-group mb-2">
+                            <input type="text" name="features[]" class="form-control" value="{{ $feature }}">
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-danger remove-feature" type="button">−</button>
                             </div>
-                        @endforeach
-                    @else
+                        </div>
+                    @empty
                         <div class="input-group mb-2">
                             <input type="text" name="features[]" class="form-control" placeholder="Recurso incluído">
                             <div class="input-group-append">
-                                <button class="btn btn-outline-secondary add-feature" type="button">
-                                    <i class="fas fa-plus"></i>
-                                </button>
+                                <button class="btn btn-outline-secondary add-feature" type="button">+</button>
                             </div>
                         </div>
-                    @endif
+                    @endforelse
                 </div>
+                <button type="button" class="btn btn-outline-secondary add-feature mt-2">+ Adicionar Recurso</button>
             </div>
-            
-            <button type="submit" class="btn btn-primary">Atualizar Plano</button>
-            <a href="{{ route('plans.index') }}" class="btn btn-secondary">Cancelar</a>
-        </form>
-    </div>
-</div>
-@endsection
 
-@push('scripts')
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Adicionar novo campo de recurso
-        document.addEventListener('click', function(e) {
-            if (e.target.classList.contains('add-feature')) {
-                const container = document.getElementById('features-container');
-                const newInput = document.createElement('div');
-                newInput.className = 'input-group mb-2';
-                newInput.innerHTML = `
-                    <input type="text" name="features[]" class="form-control" placeholder="Recurso incluído">
-                    <div class="input-group-append">
-                        <button class="btn btn-outline-danger remove-feature" type="button">
-                            <i class="fas fa-minus"></i>
-                        </button>
-                    </div>
-                `;
-                container.appendChild(newInput);
-            }
-            
-            // Remover campo de recurso
-            if (e.target.classList.contains('remove-feature')) {
-                e.target.closest('.input-group').remove();
-            }
+            {{-- FEATURES OFF --}}
+            <div class="form-group">
+                <label>Recursos Bloqueados (features_off)</label>
+                <div id="features-off-container">
+                    @php
+                        $featuresOff = is_array($plan->features_off) ? $plan->features_off : json_decode($plan->features_off, true) ?? [];
+                    @endphp
+
+                    @forelse ($featuresOff as $featureOff)
+                        <div class="input-group mb-2">
+                            <input type="text" name="features_off[]" class="form-control" value="{{ $featureOff }}">
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-danger remove-feature-off" type="button">−</button>
+                            </div>
+                        </div>
+                    @empty
+                        <div class="input-group mb-2">
+                            <input type="text" name="features_off[]" class="form-control" placeholder="Recurso bloqueado">
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-secondary add-feature-off" type="button">+</button>
+                            </div>
+                        </div>
+                    @endforelse
+                </div>
+                <button type="button" class="btn btn-outline-secondary add-feature-off mt-2">+ Adicionar Recurso Bloqueado</button>
+            </div>
+
+            <div class="btn-group" style="margin-top: 1rem;">
+                <button type="submit" class="btn btn-success">Atualizar Plano</button>
+                <a href="{{ route('plans.index') }}" class="btn btn-secondary">Cancelar</a>
+            </div>
+        </form>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            document.addEventListener('click', function (e) {
+                if (e.target.classList.contains('add-feature')) {
+                    const container = document.getElementById('features-container');
+                    const newInput = document.createElement('div');
+                    newInput.className = 'input-group mb-2';
+                    newInput.innerHTML = `
+                        <input type="text" name="features[]" class="form-control" placeholder="Recurso incluído">
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-danger remove-feature" type="button">−</button>
+                        </div>
+                    `;
+                    container.appendChild(newInput);
+                }
+
+                if (e.target.classList.contains('add-feature-off')) {
+                    const container = document.getElementById('features-off-container');
+                    const newInput = document.createElement('div');
+                    newInput.className = 'input-group mb-2';
+                    newInput.innerHTML = `
+                        <input type="text" name="features_off[]" class="form-control" placeholder="Recurso bloqueado">
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-danger remove-feature-off" type="button">−</button>
+                        </div>
+                    `;
+                    container.appendChild(newInput);
+                }
+
+                if (e.target.classList.contains('remove-feature')) {
+                    e.target.closest('.input-group').remove();
+                }
+
+                if (e.target.classList.contains('remove-feature-off')) {
+                    e.target.closest('.input-group').remove();
+                }
+            });
         });
-    });
-</script>
-@endpush
+    </script>
+</body>
+</html>

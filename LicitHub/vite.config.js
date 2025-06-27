@@ -13,7 +13,9 @@ export default defineConfig({
                     'resources/css/welcome.css',
                     'resources/js/welcome.js',
                     'resources/css/login.css',
-                    'resources/js/login.js'],
+                    'resources/css/perfil.css' ,
+                    'resources/js/login.js',
+                    'resources/css/esqueceu.css'],
                     
             refresh: true,
         }),

@@ -61,30 +61,6 @@
     text-align: center;
     margin-bottom: 60px;
   }
-  .ribbon-top {
-    position: absolute;
-    top: -12px;
-    right: -12px;
-    background: #0d6efd;
-    color: white;
-    padding: 0.5rem 1rem;
-    font-size: 0.75rem;
-    border-radius: 0.25rem;
-    z-index: 10;
-    transform: rotate(5deg);
-}
-
-.highlighted-plan {
-    border: 2px solid #0d6efd;
-    transform: scale(1.03);
-}
-
-.card:hover {
-    box-shadow: 0 0.75rem 1.5rem rgba(0, 0, 0, 0.1);
-    transform: translateY(-5px);
-    transition: 0.3s ease;
-}
-
   
   .section-header h2 {
     font-size: 36px;

@@ -1,60 +1,43 @@
-@extends('layouts.admin')
-
-@section('content')
-<div class="card">
-    <div class="card-header">
-        <h3 class="card-title">Detalhes do Plano: {{ $plan->name }}</h3>
-        <div class="card-tools">
-            <a href="{{ route('plans.edit', $plan) }}" class="btn btn-warning">
-                <i class="fas fa-edit"></i> Editar
-            </a>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Detalhes do Plano</title>
+    @vite(['resources/css/admin.css'])
+</head>
+<body class="light-mode">
+    <main class="content-wrapper">
+        <div class="page-header" style="justify-content: space-between;">
+            <h1 class="page-title">Detalhes do Plano: {{ $plan->name }}</h1>
+            <a href="{{ route('plans.edit', $plan) }}" class="btn btn-warning">Editar Plano</a>
         </div>
-    </div>
-    <div class="card-body">
-        <div class="row">
-            <div class="col-md-6">
-                <div class="info-box">
-                    <h5>Informações Básicas</h5>
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                            <strong>Nome:</strong>
-                            <span>{{ $plan->name }}</span>
-                        </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                            <strong>Slug:</strong>
-                            <span>{{ $plan->slug }}</span>
-                        </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                            <strong>Preço:</strong>
-                            <span>R$ {{ number_format($plan->price, 2, ',', '.') }}</span>
-                        </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                            <strong>Intervalo:</strong>
-                            <span>{{ $plan->interval == 'month' ? 'Mensal' : 'Anual' }}</span>
-                        </li>
+
+        <div class="cards-grid">
+            <div class="card">
+                <div class="card-info">
+                    <h3>Informações Básicas</h3>
+                    <ul class="list-group mt-2">
+                        <li class="list-group-item"><strong>Nome:</strong> {{ $plan->name }}</li>
+                        <li class="list-group-item"><strong>Slug:</strong> {{ $plan->slug }}</li>
+                        <li class="list-group-item"><strong>Preço:</strong> R$ {{ number_format($plan->price, 2, ',', '.') }}</li>
+                        <li class="list-group-item"><strong>Intervalo:</strong> {{ $plan->interval === 'month' ? 'Mensal' : 'Anual' }}</li>
                     </ul>
                 </div>
             </div>
-            
-            <div class="col-md-6">
-                <div class="info-box">
-                    <h5>Configurações</h5>
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
+
+            <div class="card">
+                <div class="card-info">
+                    <h3>Configurações</h3>
+                    <ul class="list-group mt-2">
+                        <li class="list-group-item">
                             <strong>Status:</strong>
                             <span class="badge {{ $plan->is_active ? 'badge-success' : 'badge-secondary' }}">
                                 {{ $plan->is_active ? 'Ativo' : 'Inativo' }}
                             </span>
                         </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                            <strong>Trial:</strong>
-                            <span>{{ $plan->trial_days }} dias</span>
-                        </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                            <strong>ID Stripe:</strong>
-                            <span>{{ $plan->stripe_price_id ?? 'Não configurado' }}</span>
-                        </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <li class="list-group-item"><strong>Trial:</strong> {{ $plan->trial_days }} dias</li>
+                        <li class="list-group-item"><strong>ID Stripe:</strong> {{ $plan->stripe_price_id ?? 'Não configurado' }}</li>
+                        <li class="list-group-item">
                             <strong>Assinantes:</strong>
                             <span class="badge badge-primary">{{ $plan->subscriptions()->count() }}</span>
                         </li>
@@ -62,35 +45,52 @@
                 </div>
             </div>
         </div>
-        
-        <div class="row mt-4">
-            <div class="col-md-12">
-                <div class="info-box">
-                    <h5>Descrição</h5>
-                    <p>{{ $plan->description ?? 'Nenhuma descrição fornecida.' }}</p>
-                </div>
+
+        <div class="card mt-6">
+            <div class="card-info">
+                <h3>Descrição</h3>
+                <p class="mt-2">{{ $plan->description ?? 'Nenhuma descrição fornecida.' }}</p>
             </div>
         </div>
-        
-        @if($plan->features && count($plan->features) > 0)
-        <div class="row mt-4">
-            <div class="col-md-12">
-                <div class="info-box">
-                    <h5>Recursos Incluídos</h5>
-                    <ul class="list-group">
-                        @foreach($plan->features as $feature)
-                            <li class="list-group-item">
-                                <i class="fas fa-check-circle text-success mr-2"></i> {{ $feature }}
-                            </li>
-                        @endforeach
-                    </ul>
-                </div>
+
+        @php
+            $features = is_array($plan->features) ? $plan->features : json_decode($plan->features, true) ?? [];
+            $featuresOff = is_array($plan->features_off) ? $plan->features_off : json_decode($plan->features_off, true) ?? [];
+        @endphp
+
+        @if(count($features) > 0)
+        <div class="card mt-6">
+            <div class="card-info">
+                <h3>Recursos Ativos</h3>
+                <ul class="list-group mt-2">
+                    @foreach($features as $feature)
+                        <li class="list-group-item">
+                            ✅ {{ $feature }}
+                        </li>
+                    @endforeach
+                </ul>
             </div>
         </div>
         @endif
-    </div>
-    <div class="card-footer">
-        <small class="text-muted">Criado em: {{ $plan->created_at->format('d/m/Y H:i') }}</small>
-    </div>
-</div>
-@endsection 
+
+        @if(count($featuresOff) > 0)
+        <div class="card mt-6">
+            <div class="card-info">
+                <h3>Recursos Bloqueados</h3>
+                <ul class="list-group mt-2">
+                    @foreach($featuresOff as $feature)
+                        <li class="list-group-item text-muted">
+                            ❌ {{ $feature }}
+                        </li>
+                    @endforeach
+                </ul>
+            </div>
+        </div>
+        @endif
+
+        <div class="card-footer mt-6">
+            <small class="text-muted">Criado em: {{ $plan->created_at->format('d/m/Y H:i') }}</small>
+        </div>
+    </main>
+</body>
+</html>

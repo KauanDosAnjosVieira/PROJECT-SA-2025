@@ -8,12 +8,29 @@ use Illuminate\Support\Facades\Hash;
 
 class AdminAdminController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        $search = $request->input('search');
+    
+        $admins = User::where('user_type', 'admin')
+            ->when($search, function ($query, $search) {
+                return $query->where(function($q) use ($search) {
+                    $q->where('name', 'like', "%{$search}%")
+                      ->orWhere('email', 'like', "%{$search}%");
+                });
+            })
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
+    
+        return view('admin.admins.index', compact('admins'));
+        
+
+        
         // Corrigido para buscar "admin" em vez de "admins"
         $admins = User::where("user_type", "admin")->paginate(10);
         return view("admin.admins.index", compact("admins"));
     }
+
 
     public function create()
     {
