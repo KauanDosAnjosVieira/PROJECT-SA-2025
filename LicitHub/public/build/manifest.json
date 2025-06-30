@@ -1,11 +1,11 @@
 {
   "resources/css/admin.css": {
-    "file": "assets/admin-mOQFsIPv.css",
+    "file": "assets/admin-DE8U0o2f.css",
     "src": "resources/css/admin.css",
     "isEntry": true
   },
   "resources/css/app.css": {
-    "file": "assets/app-DpIJHa6c.css",
+    "file": "assets/app-tIEVFVuq.css",
     "src": "resources/css/app.css",
     "isEntry": true
   },
@@ -15,7 +15,7 @@
     "isEntry": true
   },
   "resources/css/esqueceu.css": {
-    "file": "assets/esqueceu-B8R4qMYx.css",
+    "file": "assets/esqueceu-0Y5L3Dbi.css",
     "src": "resources/css/esqueceu.css",
     "isEntry": true
   },
@@ -25,7 +25,7 @@
     "isEntry": true
   },
   "resources/css/welcome.css": {
-    "file": "assets/welcome-BIFVgkCs.css",
+    "file": "assets/welcome-BbhNyjqg.css",
     "src": "resources/css/welcome.css",
     "isEntry": true
   },

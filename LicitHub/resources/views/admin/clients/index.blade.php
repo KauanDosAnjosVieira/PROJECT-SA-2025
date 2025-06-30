@@ -203,39 +203,20 @@
             </header>
             
             <div class="card">
-    <!--PESQUISAR CLIENTE, ALTERAVEL E ESCALAVEL-->
-    <div class="card-body">
-        <div class="search-container mb-4">
-            <form action="{{ route('clients.index') }}" method="GET">
-                <div class="input-group">
-                    <input type="text" 
-                           name="search" 
-                           class="form-control" 
-                           placeholder="Pesquisar clientes..." 
-                           value="{{ request('search') }}">
-                    <div class="input-group-append">
-                        <button class="btn btn-primary" type="submit">
-                            <i class="fas fa-search"></i> Pesquisar
-                        </button>
-                        @if(request('search'))
-                            <a href="{{ route('clients.index') }}" class="btn btn-outline-secondary">
-                                <i class="fas fa-times"></i> Limpar
-                            </a>
-                        @endif
-                    </div>
-                </div>
-            </form>
-        </div>
 
-            <div class="clients-management">
+
+        <div class="clients-management">
     <div class="page-header">
         <h2 class="page-title"></h2>
         <div class="header-actions">
+            <div class="search-box">
+                <input type="text" id="clientSearch" placeholder="Pesquisar por ID, nome, email ou tipo...">
+                <i class="fas fa-search"></i>
+            </div>
             <a href="{{ route('clients.create') }}" class="btn btn-success">
                 <i class="fas fa-plus-circle"></i> Adicionar Cliente
             </a>
         </div>
-        
         
         @if (session('success'))
             <div class="alert alert-success">
@@ -382,6 +363,33 @@
                 profileDropdown.classList.remove('show');
             });
         });
+
+        // Client search functionality
+const clientSearch = document.getElementById('clientSearch');
+const clientRows = document.querySelectorAll('.clients-management .table tbody tr');
+
+clientSearch.addEventListener('input', function() {
+    const searchTerm = this.value.toLowerCase();
+    const isNumericSearch = /^\d+$/.test(searchTerm);
+    
+    clientRows.forEach(row => {
+        const id = row.querySelector('td:nth-child(1)').textContent.toLowerCase().replace('#', '');
+        const name = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
+        const email = row.querySelector('td:nth-child(3)').textContent.toLowerCase();
+        const type = row.querySelector('td:nth-child(4)').textContent.toLowerCase();
+        
+        const matchId = isNumericSearch ? id === searchTerm : id.includes(searchTerm);
+        const matchName = name.includes(searchTerm);
+        const matchEmail = email.includes(searchTerm);
+        const matchType = type.includes(searchTerm);
+        
+        if (matchId || matchName || matchEmail || matchType) {
+            row.style.display = '';
+        } else {
+            row.style.display = 'none';
+        }
+    });
+});
     </script>
 </body>
 </html>

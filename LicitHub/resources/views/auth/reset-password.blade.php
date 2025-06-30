@@ -1,40 +1,98 @@
-<x-guest-layout>
-    <form method="POST" action="{{ route('password.store') }}">
-        @csrf
+@if(session('status'))
+<div class="alert alert-success">
+    {{ session('status') }}
+</div>
+@endif
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redefinir Senha - LictHub</title>
+    @vite(['resources/css/esqueceu.css'])
+    <style>
+        .alert {
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
 
-        <!-- Password Reset Token -->
-        <input type="hidden" name="token" value="{{ $request->route('token') }}">
+.alert-success {
+    color: #3c763d;
+    background-color: #dff0d8;
+    border-color: #d6e9c6;
+}
+    </style>
+</head>
+<body>
+    <div class="forgot-container">
 
-        <!-- Email Address -->
-        <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email', $request->email)" required autofocus autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
-        </div>
+        @if(session('status'))
+<div class="alert alert-{{ session('alertType', 'success') }}" 
+     style="padding: 15px; margin-bottom: 20px; 
+            background-color: #d4edda; color: #155724; 
+            border-radius: 4px; border: 1px solid #c3e6cb;">
+    {{ session('status') }}
+    <button type="button" 
+            style="float: right; background: none; border: none; cursor: pointer;" 
+            onclick="this.parentElement.style.display='none'">
+        ×
+    </button>
+</div>
+@endif
 
-        <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
-            <x-text-input id="password" class="block mt-1 w-full" type="password" name="password" required autocomplete="new-password" />
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
-        </div>
+        <h2>Redefinir Senha</h2>
+        
+        @if(session('status'))
+            <div class="alert success">
+                {{ session('status') }}
+            </div>
+        @endif
 
-        <!-- Confirm Password -->
-        <div class="mt-4">
-            <x-input-label for="password_confirmation" :value="__('Confirm Password')" />
+        @if($errors->any())
+            <div class="alert error">
+                @foreach ($errors->all() as $error)
+                    {{ $error }}
+                @endforeach
+            </div>
+        @endif
+        
+        <form method="POST" action="{{ route('password.update') }}">
+            @csrf
 
-            <x-text-input id="password_confirmation" class="block mt-1 w-full"
-                                type="password"
-                                name="password_confirmation" required autocomplete="new-password" />
+            <!-- Password Reset Token -->
+            <input type="hidden" name="token" value="{{ request()->route('token') }}">
 
-            <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
-        </div>
+            <!-- Email Address -->
+            <div>
+                <label for="email">Email</label>
+                <input id="email" class="input-field" type="email" name="email" 
+                       value="{{ old('email', request()->email) }}" required autofocus>
+            </div>
 
-        <div class="flex items-center justify-end mt-4">
-            <x-primary-button>
-                {{ __('Reset Password') }}
-            </x-primary-button>
-        </div>
-    </form>
-</x-guest-layout>
-    
+            <!-- Password -->
+            <div style="margin-top: 1rem;">
+                <label for="password">Nova Senha</label>
+                <input id="password" class="input-field" type="password" 
+                       name="password" required>
+            </div>
+
+            <!-- Confirm Password -->
+            <div style="margin-top: 1rem;">
+                <label for="password_confirmation">Confirmar Nova Senha</label>
+                <input id="password_confirmation" class="input-field" 
+                       type="password" name="password_confirmation" required>
+            </div>
+
+            <div class="button-container">
+                <button type="submit" class="forgot-button">
+                    Redefinir Senha
+                </button>
+            </div>
+        </form>
+        
+        <p class="back-to-login">Lembrou sua senha? <a href="{{ route('login') }}">Voltar ao Login</a></p>
+    </div>
+</body>
+</html>

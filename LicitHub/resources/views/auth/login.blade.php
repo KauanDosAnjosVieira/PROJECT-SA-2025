@@ -7,8 +7,13 @@
   @vite(['resources/css/login.css'])
 </head>
 <body>
+  
   <div class="container">
+  <!--botao para voltar ao site -->
+    
+    
     <div class="login-panel">
+      
       <h2>Faça seu login</h2>
       <form method="POST" action="{{ route('login') }}">
         @csrf

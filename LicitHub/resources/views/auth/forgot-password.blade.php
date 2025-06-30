@@ -1,31 +1,59 @@
-<x-guest-layout>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recuperar Senha - LictHub</title>
     @vite(['resources/css/esqueceu.css'])
-    
+    <style>
+        .alert {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+    </style>
+</head>
+<body>
     <div class="forgot-container">
-        <div class="mb-4 text-sm text-gray-600 dark:text-gray-400">
-            {{ __('Forgot your password? No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.') }}
-        </div>
+        <h2>Recuperar Senha</h2>
+        
+        @if(session('status'))
+            <div class="alert success">
+                {{ session('status') }}
+            </div>
+        @endif
 
-        <!-- Session Status -->
-        <x-auth-session-status class="mb-4" :status="session('status')" />
-
+        @if($errors->any())
+            <div class="alert error">
+                @foreach ($errors->all() as $error)
+                    {{ $error }}
+                @endforeach
+            </div>
+        @endif
+        
+        <p>Insira aqui o seu e-mail para receber um link de redefinição de senha.</p>
+        
         <form method="POST" action="{{ route('password.email') }}">
             @csrf
 
-            <!-- Email Address -->
             <div>
-                <x-input-label for="email" :value="__('Email')" />
-                <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus />
-                <x-input-error :messages="$errors->get('email')" class="mt-2" />
+                <input id="email" type="email" name="email" placeholder="Email" value="{{ old('email') }}" required autofocus>
             </div>
 
-            <div class="flex items-center justify-end mt-4">
-                <button type="submit" class="forgot-button">
-                    {{ __('Email Password Reset Link') }}
-                </button>
+            <div class="button-container">
+                <button type="submit" class="forgot-button">Enviar Link</button>
             </div>
         </form>
         
         <p class="back-to-login">Lembrou sua senha? <a href="{{ route('login') }}">Voltar ao Login</a></p>
     </div>
-</x-guest-layout>
+</body>
+</html>

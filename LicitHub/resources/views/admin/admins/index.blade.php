@@ -200,47 +200,26 @@
                     </div>
                 </div>
             </header>
-
-             <!--PESQUISAR ADMIN, ALTERAVEL E ESCALAVEL-->
-    <div class="card-body">
-        <div class="search-container mb-4">
-            <form action="{{ route('admins.index') }}" method="GET">
-                <div class="input-group">
-                    <input type="text" 
-                           name="search" 
-                           class="form-control" 
-                           placeholder="Pesquisar admins..." 
-                           value="{{ request('search') }}">
-                    <div class="input-group-append">
-                        <button class="btn btn-primary" type="submit">
-                            <i class="fas fa-search"></i> Pesquisar
-                        </button>
-                        @if(request('search'))
-                            <a href="{{ route('admins.index') }}" class="btn btn-outline-secondary">
-                                <i class="fas fa-times"></i> Limpar
-                            </a>
-                        @endif
-                    </div>
-                </div>
-            </form>
-        </div>
             
             <div class="clients-management">
-    <div class="page-header">
-        <h2 class="page-title"></h2>
-        <div class="header-actions">
-            <a href="{{ route('admins.create') }}" class="btn btn-success">
-                <i class="fas fa-plus-circle"></i> Adicionar Admin
-            </a>
+            <div class="page-header">
+    <h2 class="page-title"></h2>
+    <div class="header-actions">
+        <div class="search-box">
+            <input type="text" id="adminSearch" placeholder="Pesquisar por ID, nome ou email...">
+            <i class="fas fa-search"></i>
         </div>
-        
-        @if (session('success'))
-            <div class="alert alert-success">
-                <i class="fas fa-check-circle"></i> {{ session('success') }}
-            </div>
-        @endif
+        <a href="{{ route('admins.create') }}" class="btn btn-success">
+            <i class="fas fa-plus-circle"></i> Adicionar Admin
+        </a>
     </div>
     
+    @if (session('success'))
+        <div class="alert alert-success">
+            <i class="fas fa-check-circle"></i> {{ session('success') }}
+        </div>
+    @endif
+</div>
     <div class="card">
         <div class="card-body">
             <div class="table-responsive">
@@ -315,78 +294,91 @@
     <!-- JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-     document.addEventListener('DOMContentLoaded', function() {
-    // Toggle Sidebar
-    const sidebar = document.getElementById('sidebar');
-    const toggleBtn = document.getElementById('sidebar-toggle');
-    const closeBtn = document.getElementById('sidebar-close');
-    
-    toggleBtn.addEventListener('click', function() {
-        sidebar.classList.toggle('collapsed');
-        document.querySelector('.main-content').classList.toggle('expanded');
-    });
-    
-    closeBtn.addEventListener('click', function() {
-        sidebar.classList.add('collapsed');
-        document.querySelector('.main-content').classList.add('expanded');
-    });
-    
-    // Submenu toggle
-    const submenuItems = document.querySelectorAll('.has-submenu > a');
-    submenuItems.forEach(item => {
-        item.addEventListener('click', function(e) {
-            e.preventDefault();
-            const submenu = this.nextElementSibling;
-            const parent = this.parentElement;
+        document.addEventListener('DOMContentLoaded', function() {
+            // Toggle Sidebar
+            const sidebar = document.getElementById('sidebar');
+            const toggleBtn = document.getElementById('sidebar-toggle');
+            const closeBtn = document.getElementById('sidebar-close');
             
-            parent.classList.toggle('open');
-            submenu.style.maxHeight = parent.classList.contains('open') 
-                ? submenu.scrollHeight + 'px' 
-                : '0';
+            toggleBtn.addEventListener('click', function() {
+                sidebar.classList.toggle('collapsed');
+                document.querySelector('.main-content').classList.toggle('expanded');
+            });
+            
+            closeBtn.addEventListener('click', function() {
+                sidebar.classList.add('collapsed');
+                document.querySelector('.main-content').classList.add('expanded');
+            });
+            
+            // Submenu toggle
+            const submenuItems = document.querySelectorAll('.has-submenu > a');
+            submenuItems.forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const submenu = this.nextElementSibling;
+                    const parent = this.parentElement;
+                    
+                    parent.classList.toggle('open');
+                    submenu.style.maxHeight = parent.classList.contains('open') 
+                        ? submenu.scrollHeight + 'px' 
+                        : '0';
+                });
+            });
+            
+            // Theme Toggle
+            const themeToggle = document.getElementById('theme-toggle');
+            themeToggle.addEventListener('click', function() {
+                document.body.classList.toggle('dark-mode');
+                
+                if (document.body.classList.contains('dark-mode')) {
+                    localStorage.setItem('theme', 'dark');
+                } else {
+                    localStorage.setItem('theme', 'light');
+                }
+            });
+            
+            // Check for saved theme preference
+            if (localStorage.getItem('theme') === 'dark') {
+                document.body.classList.add('dark-mode');
+            }
+            
+            
+            // Profile dropdown
+            const profileAvatar = document.querySelector('.profile-avatar');
+            const profileDropdown = document.querySelector('.profile-dropdown');
+            
+            profileAvatar.addEventListener('click', function(e) {
+                e.stopPropagation();
+                profileDropdown.classList.toggle('show');   
+            });
+            
+            // Close dropdowns when clicking outside
+            document.addEventListener('click', function() {
+                notificationDropdown.classList.remove('show');
+                profileDropdown.classList.remove('show');
+            });
         });
-    });
+
+// Admin search functionality
+const adminSearch = document.getElementById('adminSearch');
+const adminRows = document.querySelectorAll('.table tbody tr');
+
+adminSearch.addEventListener('input', function() {
+    const searchTerm = this.value.toLowerCase();
     
-    // Theme Toggle
-    const themeToggle = document.getElementById('theme-toggle');
-    themeToggle.addEventListener('click', function() {
-        document.body.classList.toggle('dark-mode');
+    adminRows.forEach(row => {
+        const id = row.querySelector('td:nth-child(1)').textContent.toLowerCase();
+        const name = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
+        const email = row.querySelector('td:nth-child(3)').textContent.toLowerCase();
+        const type = row.querySelector('td:nth-child(4)').textContent.toLowerCase();
         
-        if (document.body.classList.contains('dark-mode')) {
-            localStorage.setItem('theme', 'dark');
+        if (id.includes(searchTerm) || name.includes(searchTerm) || email.includes(searchTerm) || type.includes(searchTerm)) {
+            row.style.display = '';
         } else {
-            localStorage.setItem('theme', 'light');
-        }
-    });
-    
-    // Check for saved theme preference
-    if (localStorage.getItem('theme') === 'dark') {
-        document.body.classList.add('dark-mode');
-    }
-    
-    
-    // Profile dropdown
-    const profileAvatar = document.querySelector('.profile-avatar');
-    const profileDropdown = document.querySelector('.profile-dropdown');
-    
-    profileAvatar.addEventListener('click', function(e) {
-        e.stopPropagation();
-        profileDropdown.classList.toggle('show');   
-    });
-    
-    // Notification dropdown (se existir)
-    const notificationDropdown = document.querySelector('.notification-dropdown');
-    
-    // Close dropdowns when clicking outside
-    document.addEventListener('click', function() {
-        if (notificationDropdown) {
-            notificationDropdown.classList.remove('show');
-        }
-        if (profileDropdown) {
-            profileDropdown.classList.remove('show');
+            row.style.display = 'none';
         }
     });
 });
-
     </script>
 </body>
 </html>

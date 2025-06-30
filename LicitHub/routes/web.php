@@ -8,7 +8,6 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
-use App\Http\Controllers\WelcomeController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 
@@ -20,6 +19,7 @@ use App\Http\Controllers\AdminChatController;
 use App\Http\Controllers\ClientChatController;
 use App\Http\Controllers\AdminAdminController;
 use App\Http\Controllers\AdminPlanController;
+use App\Http\Controllers\WelcomeController;
 use App\Models\User;
 use App\Models\Plan;
 
@@ -128,6 +128,10 @@ Route::middleware(['auth'])->group(function () {
         return back()->with('message', 'Verification link sent!');
     })->middleware(['throttle:6,1'])->name('verification.send');
 });
+
+Route::get('/receipt/{subscription}', [ReceiptController::class, 'generate'])
+     ->name('receipt.generate')
+     ->middleware('auth');
 
 
 // routes/web.php

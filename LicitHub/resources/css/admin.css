@@ -697,6 +697,117 @@ ul {
   font-size: 0.8rem;
   color: var(--gray-400);
 }
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.search-box {
+  position: relative;
+  display: inline-block;
+  margin-right: auto; /* Isso empurra os outros elementos para a direita */
+}
+
+.search-box input {
+  padding: 8px 5px 8px 35px;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  background-color: var(--card-bg);
+  color: var(--text-color);
+  transition: all 0.3s;
+  width: 280px; /* Largura um pouco maior */
+}
+
+.search-box input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(var(--primary-rgb), 0.1);
+}
+
+.search-box i {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+}
+
+
+/* Estilos para a barra de pesquisa */
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.search-box {
+  position: relative;
+  display: inline-block;
+  margin-right: auto;
+}
+
+.search-box input {
+  padding: 8px 15px 8px 35px;
+  border-radius: 4px;
+  border: 1px solid var(--border-color);
+  background-color: var(--card-bg);
+  color: var(--text-color);
+  transition: all 0.3s;
+  width: 300px;
+  height: 38px;
+}
+
+.search-box input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(var(--primary-rgb), 0.1);
+}
+
+.search-box i {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+/* Ajustes para a tabela de clientes */
+.user-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  margin-right: 10px;
+  object-fit: cover;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+}
+
+.badge {
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.badge-primary {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.badge-secondary {
+  background-color: var(--secondary-bg);
+  color: var(--text-color);
+}
+
+.badge-success {
+  background-color: var(--success-color);
+  color: white;
+}
 
 .profile-links {
   padding: 0.5rem 0;

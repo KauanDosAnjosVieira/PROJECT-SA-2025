@@ -223,7 +223,7 @@
                 </div>
                 
                 <div class="plan-footer">
-                    <a href="{{ route('subscriptions.checkout', $plan->id) }}" class="btn btn-subscribe">
+                        <a href="{{ route('subscriptions.checkout', $plan->id) }}" class="btn btn-subscribe">
                         Assinar Agora
                     </a>
                 </div>

@@ -7,6 +7,11 @@ use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
 
 class ForgotPasswordController extends Controller
 {
+
+    public function showLinkRequestForm()
+{
+    return view('auth.forgot-password'); // Sua view customizada
+}
     /*
     |--------------------------------------------------------------------------
     | Password Reset Controller

@@ -4,21 +4,111 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Admin Dashboard | Sistema de Gerenciamento</title>
+    <title>Admin Pro | Gerenciar Planos</title>
     
     <!-- Fontes e Ícones -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     
-    <!-- Assets -->
+    <!-- CSS -->
     @vite(['resources/css/admin.css'])
     
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="/images/favicon.png">
     
-    <!-- Meta Tags -->
-    <meta name="description" content="Painel administrativo completo para gerenciamento de clientes, produtos e pedidos">
+    <style>
+        /* Estilos específicos para a página de planos */
+        .plans-management {
+            padding: 20px;
+        }
+
+        .search-box {
+            position: relative;
+            margin-right: 15px;
+        }
+
+        .search-box input {
+            padding: 8px 15px 8px 35px;
+            border-radius: 4px;
+            border: 1px solid var(--border-color);
+            width: 250px;
+            transition: all 0.3s;
+            background-color: var(--card-bg);
+            color: var(--text-color);
+        }
+
+        .search-box input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(var(--primary-rgb), 0.1);
+            outline: none;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+        }
+
+        .advanced-filters {
+            background-color: var(--card-bg);
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            border: 1px solid var(--border-color);
+        }
+
+        .filter-row {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .filter-group label {
+            margin-bottom: 0;
+            font-weight: 500;
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        .badge {
+            padding: 5px 10px;
+            font-size: 12px;
+            font-weight: 500;
+            border-radius: 4px;
+        }
+
+        .badge-success {
+            background-color: var(--success-color);
+            color: white;
+        }
+
+        .badge-secondary {
+            background-color: var(--secondary-bg);
+            color: var(--text-color);
+        }
+
+        .badge-info {
+            background-color: var(--info-color);
+            color: white;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+        }
+    </style>
 </head>
 <body class="dark-mode">
     <div class="admin-container">
@@ -73,35 +163,6 @@
                             <span class="menu-text">Planos</span>
                         </a>
                     </li>
-                    <!--<li class="menu-item has-submenu">
-                        <a href="#">
-                            <div class="menu-icon">
-                                <i class="fas fa-file-invoice-dollar"></i>
-                            </div>
-                            <span class="menu-text">Pedidos</span>
-                            <div class="menu-arrow">
-                                <i class="fas fa-chevron-down"></i>
-                            </div>
-                        </a>
-                        <ul class="submenu">
-                            <li>
-                                <a href="#">
-                                    <span class="submenu-text">Novos Pedidos</span>
-                                    <span class="submenu-badge">5</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    <span class="submenu-text">Completos</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    <span class="submenu-text">Cancelados</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>-->
                     <li class="menu-item">
                         <a href="#">
                             <div class="menu-icon">
@@ -110,17 +171,6 @@
                             <span class="menu-text">Relatórios</span>
                         </a>
                     </li>
-                    
-                    <!--<li class="menu-title">SISTEMA</li>
-                    <li class="menu-item">
-                        <a href="#">
-                            <div class="menu-icon">
-                                <i class="fas fa-cog"></i>
-                            </div>
-                            <span class="menu-text">Configurações</span>
-                        </a>
-                    </li>-->
-                    
                 </ul>
             </div>
             
@@ -153,12 +203,10 @@
                         <i class="fas fa-bars"></i>
                     </button>
                     <div class="header-title">
-                        <h1>@yield('page-title', 'Gerenciamento de Planos')</h1>
+                        <h1>Gerenciamento de Planos</h1>
                     </div>
-                    
                 </div>
                 <div class="header-right">
-                    
                     <div class="header-actions">
                         <button class="theme-toggle" id="theme-toggle">
                             <i class="fas fa-moon"></i>
@@ -198,76 +246,113 @@
                     </div>
                 </div>
             </header>
-            <div class="header-actions">
-                        <a href="{{ route('plans.create') }}" class="btn btn-success">
-                            <i class="fas fa-plus-circle"></i> Adicionar Plano
-                        </a>
-                    </div>
+
             <div class="content-wrapper">
-                
-                @yield('content')
-                
-                <div class="card">
-                    
-        <div class="card-body">
-            
-            <div class="table-responsive">
-                <table class="table table-hover">
-                    
-                    <thead class="thead-light">
-                        <tr>
-                            <th>ID</th>
-                            <th>Nome</th>
-                            <th>Preço</th>
-                            <th>Intervalo</th>
-                            <th>Trial</th>
-                            <th>Status</th>
-                            <th>Ações</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($plans as $plan)
-                        <tr>
-                            <td>#{{ $plan->id }}</td>
-                            <td>{{ $plan->name }}</td>
-                            <td>R$ {{ number_format($plan->price, 2, ',', '.') }}</td>
-                            <td>
-                                <span class="badge badge-info">
-                                    {{ $plan->interval == 'month' ? 'Mensal' : 'Anual' }}
-                                </span>
-                            </td>
-                            <td>{{ $plan->trial_days }} dias</td>
-                            <td>
-                                <span class="badge {{ $plan->is_active ? 'badge-success' : 'badge-secondary' }}">
-                                    {{ $plan->is_active ? 'Ativo' : 'Inativo' }}
-                                </span>
-                            </td>
-                            <td>
-                                <div class="btn-group">
-                                    <a href="{{ route('plans.show', $plan) }}" class="btn btn-sm btn-info" title="Detalhes">
-                                        <i class="fas fa-eye"></i>
-                                    </a>
-                                    <a href="{{ route('plans.edit', $plan) }}" class="btn btn-sm btn-warning" title="Editar">
-                                        <i class="fas fa-edit"></i>
-                                    </a>
-                                    <form action="{{ route('plans.destroy', $plan) }}" method="POST" class="d-inline">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-sm btn-danger" title="Excluir" 
-                                            onclick="return confirm('Tem certeza que deseja excluir este plano?')">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </form>
-                                </div>
-                            </td>
-                        </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-</div>
+                <div class="plans-management">
+                    <div class="page-header">
+                        <div class="header-left">
+                            <h2 class="page-title"></h2>
+                        </div>
+                        <div class="header-actions">
+                            <div class="search-box">
+                                <input type="text" id="planSearch" placeholder="Pesquisar planos...">
+                                <i class="fas fa-search"></i>
+                            </div>
+                            <a href="{{ route('plans.create') }}" class="btn btn-success">
+                                <i class="fas fa-plus-circle"></i> Adicionar Plano
+                            </a>
+                        </div>
+                    </div>
+
+                    @if (session('success'))
+                        <div class="alert alert-success">
+                            <i class="fas fa-check-circle"></i> {{ session('success') }}
+                        </div>
+                    @endif
+
+                    <div class="advanced-filters mb-3">
+                        <div class="filter-row">
+                            <div class="filter-group">
+                                <label>Status:</label>
+                                <select id="statusFilter" class="form-control-sm">
+                                    <option value="">Todos</option>
+                                    <option value="active">Ativos</option>
+                                    <option value="inactive">Inativos</option>
+                                </select>
+                            </div>
+                            <div class="filter-group">
+                                <label>Intervalo:</label>
+                                <select id="intervalFilter" class="form-control-sm">
+                                    <option value="">Todos</option>
+                                    <option value="month">Mensal</option>
+                                    <option value="year">Anual</option>
+                                </select>
+                            </div>
+                            <button id="resetFilters" class="btn btn-sm btn-outline-secondary">
+                                <i class="fas fa-undo"></i> Limpar Filtros
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-hover" id="plansTable">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Nome</th>
+                                            <th>Preço</th>
+                                            <th>Intervalo</th>
+                                            <th>Trial</th>
+                                            <th>Status</th>
+                                            <th>Ações</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($plans as $plan)
+                                        <tr>
+                                            <td>#{{ $plan->id }}</td>
+                                            <td>{{ $plan->name }}</td>
+                                            <td>R$ {{ number_format($plan->price, 2, ',', '.') }}</td>
+                                            <td>
+                                                <span class="badge badge-info">
+                                                    {{ $plan->interval == 'month' ? 'Mensal' : 'Anual' }}
+                                                </span>
+                                            </td>
+                                            <td>{{ $plan->trial_days }} dias</td>
+                                            <td>
+                                                <span class="badge {{ $plan->is_active ? 'badge-success' : 'badge-secondary' }}">
+                                                    {{ $plan->is_active ? 'Ativo' : 'Inativo' }}
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <div class="btn-group">
+                                                    <a href="{{ route('plans.show', $plan) }}" class="btn btn-sm btn-info" title="Detalhes">
+                                                        <i class="fas fa-eye"></i>
+                                                    </a>
+                                                    <a href="{{ route('plans.edit', $plan) }}" class="btn btn-sm btn-warning" title="Editar">
+                                                        <i class="fas fa-edit"></i>
+                                                    </a>
+                                                    <form action="{{ route('plans.destroy', $plan) }}" method="POST" class="d-inline">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="btn btn-sm btn-danger" title="Excluir" 
+                                                            onclick="return confirm('Tem certeza que deseja excluir este plano?')">
+                                                            <i class="fas fa-trash"></i>
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
             </div>
         </main>
     </div>
@@ -288,21 +373,6 @@
             closeBtn.addEventListener('click', function() {
                 sidebar.classList.add('collapsed');
                 document.querySelector('.main-content').classList.add('expanded');
-            });
-            
-            // Submenu toggle
-            const submenuItems = document.querySelectorAll('.has-submenu > a');
-            submenuItems.forEach(item => {
-                item.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const submenu = this.nextElementSibling;
-                    const parent = this.parentElement;
-                    
-                    parent.classList.toggle('open');
-                    submenu.style.maxHeight = parent.classList.contains('open') 
-                        ? submenu.scrollHeight + 'px' 
-                        : '0';
-                });
             });
             
             // Theme Toggle
@@ -335,8 +405,61 @@
             document.addEventListener('click', function() {
                 profileDropdown.classList.remove('show');
             });
+
+            // Filtros de planos
+            const planSearch = document.getElementById('planSearch');
+            const statusFilter = document.getElementById('statusFilter');
+            const intervalFilter = document.getElementById('intervalFilter');
+            const resetFilters = document.getElementById('resetFilters');
+            const plansTable = document.getElementById('plansTable');
+            const planRows = plansTable.querySelectorAll('tbody tr');
+
+            function applyFilters() {
+                const searchTerm = planSearch.value.toLowerCase();
+                const statusValue = statusFilter.value;
+                const intervalValue = intervalFilter.value;
+
+                planRows.forEach(row => {
+                    const id = row.querySelector('td:nth-child(1)').textContent.toLowerCase();
+                    const name = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
+                    const price = row.querySelector('td:nth-child(3)').textContent.toLowerCase();
+                    const interval = row.querySelector('td:nth-child(4)').textContent.toLowerCase();
+                    const status = row.querySelector('td:nth-child(6)').textContent.toLowerCase();
+
+                    // Verifica correspondências
+                    const matchesSearch = searchTerm === '' || 
+                                       id.includes(searchTerm) || 
+                                       name.includes(searchTerm) || 
+                                       price.includes(searchTerm);
+
+                    const matchesStatus = statusValue === '' || 
+                                      (statusValue === 'active' && status.includes('ativo')) || 
+                                      (statusValue === 'inactive' && status.includes('inativo'));
+
+                    const matchesInterval = intervalValue === '' || 
+                                        (intervalValue === 'month' && interval.includes('mensal')) || 
+                                        (intervalValue === 'year' && interval.includes('anual'));
+
+                    // Mostra/oculta linha baseado nos filtros
+                    row.style.display = (matchesSearch && matchesStatus && matchesInterval) ? '' : 'none';
+                });
+            }
+
+            // Event listeners
+            planSearch.addEventListener('input', applyFilters);
+            statusFilter.addEventListener('change', applyFilters);
+            intervalFilter.addEventListener('change', applyFilters);
+
+            resetFilters.addEventListener('click', function() {
+                planSearch.value = '';
+                statusFilter.value = '';
+                intervalFilter.value = '';
+                applyFilters();
+            });
+
+            // Aplicar filtros inicialmente
+            applyFilters();
         });
     </script>
-    @stack('scripts')
 </body>
 </html>

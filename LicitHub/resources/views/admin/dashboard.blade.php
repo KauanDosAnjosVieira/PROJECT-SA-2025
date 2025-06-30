@@ -53,7 +53,7 @@
                                 <i class="fas fa-tachometer-alt"></i>
                             </div>
                             <span class="menu-text">Dashboard</span>
-                            <span class="menu-badge">New</span>
+                            
                         </a>
                     </li>
                     
@@ -162,7 +162,7 @@
                         <i class="fas fa-bars"></i>
                     </button>
                     <div class="header-title">
-                        <h1>Dashboard</h1>
+                        <h1>Dashboard - {{ Auth::user()->name }}</h1>
                         <!-- <nav class="breadcrumb">
                             <a href="#">Home</a>
                             <i class="fas fa-chevron-right"></i>

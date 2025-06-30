@@ -1,10 +1,11 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Laravel\Cashier\Cashier;
 use Illuminate\Http\Request;
 use App\Models\Plan;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\RedirectResponse;
 use Stripe\Stripe;
 use Stripe\Checkout\Session;
 use Carbon\Carbon;
@@ -27,19 +28,22 @@ class SubscriptionController extends Controller
         $user = Auth::user();
 
         Stripe::setApiKey(config('services.stripe.secret'));
-
-        $session = Session::create([
+        $session = \Stripe\Checkout\Session::create([
             'payment_method_types' => ['card'],
-            'mode' => 'subscription',
             'line_items' => [[
-                'price' => $plan->stripe_price_id,
+                'price_data' => [
+                    'currency' => 'brl',
+                    'product_data' => [
+                        'name' => $plan->name,
+                    ],
+                    'unit_amount' => $plan->price * 100, // Stripe espera o valor em centavos
+                ],
                 'quantity' => 1,
             ]],
-            'customer_email' => $user->email,
-            'success_url' => route('subscriptions.success') . '?session_id={CHECKOUT_SESSION_ID}',
+            'mode' => 'payment', // ou 'subscription' se for um plano recorrente
+            'success_url' => route('subscriptions.success'),
             'cancel_url' => route('subscriptions.cancel'),
         ]);
-
         return redirect($session->url);
     }
 
@@ -129,6 +133,12 @@ public function success(Request $request)
                 );
             }
         }
+
+          // Obter a assinatura confirmada
+    $subscription = auth()->user()->subscriptions()->latest()->first();
+    
+    // Redirecionar para o recibo
+    return redirect()->route('receipt.generate', $subscription->id);
         
         // Adicionar log para depuração
         Log::info('Checkout processado com sucesso', [
@@ -136,6 +146,8 @@ public function success(Request $request)
             'stripe_id' => $customer->id,
             'subscription_id' => $subscription->id
         ]);
+
+
         
         return view('subscriptions.success');
     } catch (\Exception $e) {
@@ -147,10 +159,18 @@ public function success(Request $request)
         return redirect()->route('subscriptions.index')
             ->with('error', 'Erro ao processar o pagamento: ' . $e->getMessage());
     }
+
 }
 
-    public function cancel()
-    {
-        return redirect()->route('subscriptions.index')->with('error', 'Assinatura cancelada.');
+public function cancel(Request $request): RedirectResponse
+{
+    $user = $request->user();
+
+    if ($user->subscribed()) {
+        $user->subscriptions()->cancel();
     }
+
+    return redirect('/')->with('success', 'Assinatura cancelada com sucesso.');
+}
+
 }
