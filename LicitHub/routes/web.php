@@ -67,8 +67,7 @@ Route::middleware(['auth'])->group(function () {
 
     // Assinaturas com suporte a PIX
     Route::get('/subscriptions', [SubscriptionController::class, 'index'])->name('subscriptions.index');
-    Route::get('/subscriptions/{plan}/checkout', [SubscriptionController::class, 'checkout'])->name('subscriptions.checkout');
-    Route::post('/subscriptions/{plan}/process', [SubscriptionController::class, 'process'])->name('subscriptions.process'); // desativado para PIX, só existe para cartão
+    Route::get('/subscriptions/checkout/{plan}', [SubscriptionController::class, 'checkout']) ->name('subscriptions.checkout');    Route::post('/subscriptions/{plan}/process', [SubscriptionController::class, 'process'])->name('subscriptions.process'); // desativado para PIX, só existe para cartão
     Route::get('/subscriptions/success', [SubscriptionController::class, 'success'])->name('subscriptions.success');
     Route::post('/subscriptions/cancel', [SubscriptionController::class, 'cancel'])->name('subscriptions.cancel');
 });

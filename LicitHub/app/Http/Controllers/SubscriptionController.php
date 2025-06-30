@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use Laravel\Cashier\Cashier;
 use Illuminate\Http\Request;
 use App\Models\Plan;
@@ -11,8 +12,6 @@ use Stripe\Checkout\Session;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
-
-
 
 class SubscriptionController extends Controller
 {
@@ -27,97 +26,84 @@ class SubscriptionController extends Controller
         $plan = Plan::findOrFail($planId);
         $user = Auth::user();
 
+        // Configuração do Stripe
         Stripe::setApiKey(config('services.stripe.secret'));
-        $session = \Stripe\Checkout\Session::create([
+
+        // Verifica se o usuário já tem um customer ID no Stripe
+        if (!$user->stripe_id) {
+            // Cria um novo customer no Stripe se não existir
+            $stripeCustomer = $user->createAsStripeCustomer();
+        }
+
+        // Cria a sessão de checkout
+        $session = Session::create([
+            'customer' => $user->stripe_id,
             'payment_method_types' => ['card'],
             'line_items' => [[
-                'price_data' => [
-                    'currency' => 'brl',
-                    'product_data' => [
-                        'name' => $plan->name,
-                    ],
-                    'unit_amount' => $plan->price * 100, // Stripe espera o valor em centavos
-                ],
+                'price' => $plan->stripe_price_id, // Usa o price_id do Stripe
                 'quantity' => 1,
             ]],
-            'mode' => 'payment', // ou 'subscription' se for um plano recorrente
-            'success_url' => route('subscriptions.success'),
-            'cancel_url' => route('subscriptions.cancel'),
+            'mode' => 'subscription', // Modo subscription para pagamentos recorrentes
+            'success_url' => route('subscriptions.success', [], true).'?session_id={CHECKOUT_SESSION_ID}',
+            'cancel_url' => route('subscriptions.cancel', [], true),
+            'metadata' => [
+                'plan_id' => $plan->id,
+                'user_id' => $user->id
+            ],
         ]);
+
         return redirect($session->url);
     }
 
-public function success(Request $request)
-{
-    if (!$request->session_id) {
-        return redirect()->route('subscriptions.index')
-            ->with('error', 'Sessão de checkout inválida.');
-    }
-    
-    // Inicializar Stripe
-    \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
-    
-    try {
-        // Recuperar a sessão de checkout
-        $session = \Stripe\Checkout\Session::retrieve($request->session_id);
-        
-        // Recuperar o cliente e a assinatura do Stripe
-        $customer = \Stripe\Customer::retrieve($session->customer);
-        $subscription = \Stripe\Subscription::retrieve($session->subscription);
-        
-        // Obter o usuário atual
-        $user = Auth::user();
-        
-        // Atualizar diretamente no banco de dados (sem usar o método save ou update)
-        DB::table('users')
-            ->where('id', $user->id)
-            ->update([
-                'stripe_id' => $customer->id,
-                'pm_type' => null, // Vamos atualizar isso abaixo se disponível
-                'pm_last_four' => null, // Vamos atualizar isso abaixo se disponível
-                'trial_ends_at' => $subscription->trial_end ? 
-                    date('Y-m-d H:i:s', $subscription->trial_end) : null
-            ]);
-        
-        // Buscar o método de pagamento e atualizar pm_type e pm_last_four
-        if ($subscription->default_payment_method) {
-            $paymentMethod = \Stripe\PaymentMethod::retrieve($subscription->default_payment_method);
-            if ($paymentMethod->type == 'card') {
-                DB::table('users')
-                    ->where('id', $user->id)
-                    ->update([
-                        'pm_type' => 'card',
-                        'pm_last_four' => $paymentMethod->card->last4
-                    ]);
+    public function success(Request $request)
+    {
+        try {
+            // Verifica se temos o session_id
+            if (!$request->has('session_id')) {
+                throw new \Exception('ID da sessão não encontrado');
             }
-        }
-        
-        // Registrar a assinatura na tabela cashier_subscriptions
-        DB::table('cashier_subscriptions')->updateOrInsert(
-            ['stripe_id' => $subscription->id],
-            [
-                'user_id' => $user->id,
-                'name' => 'default',
-                'stripe_status' => $subscription->status,
-                'stripe_price' => $subscription->items->data[0]->price->id,
-                'quantity' => $subscription->items->data[0]->quantity ?? 1,
-                'trial_ends_at' => $subscription->trial_end ? 
-                    date('Y-m-d H:i:s', $subscription->trial_end) : null,
-                'ends_at' => $subscription->cancel_at ? 
-                    date('Y-m-d H:i:s', $subscription->cancel_at) : null,
-                'created_at' => now(),
-                'updated_at' => now()
-            ]
-        );
-        
-        // Registrar o pagamento (se houver)
-        if ($subscription->latest_invoice) {
-            $invoice = \Stripe\Invoice::retrieve($subscription->latest_invoice);
-            
-            if ($invoice && $invoice->status === 'paid') {
-                DB::table('payments')->updateOrInsert(
-                    ['gateway_id' => $invoice->id],
-                    [
+
+            $sessionId = $request->get('session_id');
+            Stripe::setApiKey(config('services.stripe.secret'));
+
+            // Recupera a sessão do Stripe
+            $session = Session::retrieve($sessionId);
+
+            // Verifica se a sessão foi paga
+            if ($session->payment_status !== 'paid') {
+                throw new \Exception('Pagamento não foi concluído');
+            }
+
+            // Recupera a assinatura do Stripe
+            $subscription = \Stripe\Subscription::retrieve($session->subscription);
+
+            // Atualiza o usuário com os dados do Stripe
+            $user = Auth::user();
+            $user->stripe_id = $session->customer;
+            $user->save();
+
+            // Cria ou atualiza a assinatura no banco de dados
+            DB::table('cashier_subscriptions')->updateOrInsert(
+                ['stripe_id' => $subscription->id],
+                [
+                    'user_id' => $user->id,
+                    'name' => 'default',
+                    'stripe_status' => $subscription->status,
+                    'stripe_price' => $subscription->items->data[0]->price->id,
+                    'quantity' => 1,
+                    'trial_ends_at' => $subscription->trial_end ? Carbon::createFromTimestamp($subscription->trial_end) : null,
+                    'ends_at' => $subscription->cancel_at ? Carbon::createFromTimestamp($subscription->cancel_at) : null,
+                    'created_at' => now(),
+                    'updated_at' => now()
+                ]
+            );
+
+            // Registra o pagamento
+            if ($subscription->latest_invoice) {
+                $invoice = \Stripe\Invoice::retrieve($subscription->latest_invoice);
+                
+                if ($invoice && $invoice->status === 'paid') {
+                    DB::table('payments')->insert([
                         'user_id' => $user->id,
                         'subscription_id' => DB::table('cashier_subscriptions')
                             ->where('stripe_id', $subscription->id)
@@ -125,52 +111,36 @@ public function success(Request $request)
                         'amount' => $invoice->amount_paid / 100,
                         'currency' => $invoice->currency,
                         'gateway' => 'stripe',
+                        'gateway_id' => $invoice->id,
                         'status' => 'paid',
-                        'paid_at' => date('Y-m-d H:i:s', $invoice->created),
+                        'paid_at' => Carbon::createFromTimestamp($invoice->created),
                         'created_at' => now(),
                         'updated_at' => now()
-                    ]
-                );
+                    ]);
+                }
             }
+
+            Log::info('Assinatura criada com sucesso', [
+                'user_id' => $user->id,
+                'subscription_id' => $subscription->id
+            ]);
+
+            return redirect()->route('receipt.generate', [
+                'subscription' => DB::table('cashier_subscriptions')
+                    ->where('stripe_id', $subscription->id)
+                    ->value('id')
+            ]);
+
+        } catch (\Exception $e) {
+            Log::error('Erro ao processar assinatura: ' . $e->getMessage());
+            return redirect()->route('subscriptions.index')
+                ->with('error', 'Erro ao processar sua assinatura: ' . $e->getMessage());
         }
+    }
 
-          // Obter a assinatura confirmada
-    $subscription = auth()->user()->subscriptions()->latest()->first();
-    
-    // Redirecionar para o recibo
-    return redirect()->route('receipt.generate', $subscription->id);
-        
-        // Adicionar log para depuração
-        Log::info('Checkout processado com sucesso', [
-            'user_id' => $user->id,
-            'stripe_id' => $customer->id,
-            'subscription_id' => $subscription->id
-        ]);
-
-
-        
-        return view('subscriptions.success');
-    } catch (\Exception $e) {
-        Log::error('Erro ao processar checkout: ' . $e->getMessage(), [
-            'session_id' => $request->session_id,
-            'user_id' => Auth::id()
-        ]);
-        
+    public function cancel(Request $request): RedirectResponse
+    {
         return redirect()->route('subscriptions.index')
-            ->with('error', 'Erro ao processar o pagamento: ' . $e->getMessage());
+            ->with('info', 'Você cancelou o processo de assinatura.');
     }
-
-}
-
-public function cancel(Request $request): RedirectResponse
-{
-    $user = $request->user();
-
-    if ($user->subscribed()) {
-        $user->subscriptions()->cancel();
-    }
-
-    return redirect('/')->with('success', 'Assinatura cancelada com sucesso.');
-}
-
 }

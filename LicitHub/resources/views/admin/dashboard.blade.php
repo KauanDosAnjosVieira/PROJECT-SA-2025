@@ -4,6 +4,31 @@
         header('Location: ' . url('/'));
         exit;
     }
+
+    // Obter dados reais do banco de dados
+    $totalCustomers = App\Models\User::where('user_type', 'customer')->count();
+    $totalAdmins = App\Models\User::where('user_type', 'admin')->count();
+    $totalSubscriptions = App\Models\CashierSubscription::where('stripe_status', 'active')->count();
+    $totalRevenue = App\Models\Payment::where('status', 'paid')->sum('amount');
+    
+    // Atividade recente (últimos 7 dias)
+    $recentUsers = App\Models\User::with('subscriptions')
+        ->where('created_at', '>=', now()->subDays(7))
+        ->orderBy('created_at', 'desc')
+        ->limit(10)
+        ->get();
+
+    $recentSubscriptions = App\Models\CashierSubscription::with('user')
+        ->where('created_at', '>=', now()->subDays(7))
+        ->orderBy('created_at', 'desc')
+        ->limit(10)
+        ->get();
+
+    $recentPayments = App\Models\Payment::with('user')
+        ->where('created_at', '>=', now()->subDays(7))
+        ->orderBy('created_at', 'desc')
+        ->limit(10)
+        ->get();
 @endphp
 
 <!DOCTYPE html>
@@ -53,7 +78,6 @@
                                 <i class="fas fa-tachometer-alt"></i>
                             </div>
                             <span class="menu-text">Dashboard</span>
-                            
                         </a>
                     </li>
                     
@@ -75,42 +99,13 @@
                         </a>
                     </li>
                     <li class="menu-item">
-                    <a href="{{ route('plans.index') }}">
+                        <a href="{{ route('plans.index') }}">
                             <div class="menu-icon">
                                 <i class="fas fa-box"></i>
                             </div>
                             <span class="menu-text">Planos</span>
                         </a>
                     </li>
-                    <!--<li class="menu-item has-submenu">
-                        <a href="#">
-                            <div class="menu-icon">
-                                <i class="fas fa-file-invoice-dollar"></i>
-                            </div>
-                            <span class="menu-text">Pedidos</span>
-                            <div class="menu-arrow">
-                                <i class="fas fa-chevron-down"></i>
-                            </div>
-                        </a>
-                        <ul class="submenu">
-                            <li>
-                                <a href="#">
-                                    <span class="submenu-text">Novos Pedidos</span>
-                                    <span class="submenu-badge">5</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    <span class="submenu-text">Completos</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    <span class="submenu-text">Cancelados</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>-->
                     <li class="menu-item">
                         <a href="#">
                             <div class="menu-icon">
@@ -119,17 +114,6 @@
                             <span class="menu-text">Relatórios</span>
                         </a>
                     </li>
-                    
-                    <!--<li class="menu-title">SISTEMA</li>
-                    <li class="menu-item">
-                        <a href="#">
-                            <div class="menu-icon">
-                                <i class="fas fa-cog"></i>
-                            </div>
-                            <span class="menu-text">Configurações</span>
-                        </a>
-                    </li>-->
-                    
                 </ul>
             </div>
             
@@ -163,11 +147,6 @@
                     </button>
                     <div class="header-title">
                         <h1>Dashboard - {{ Auth::user()->name }}</h1>
-                        <!-- <nav class="breadcrumb">
-                            <a href="#">Home</a>
-                            <i class="fas fa-chevron-right"></i>
-                            <span>Dashboard</span>
-                        </nav>-->
                     </div>
                 </div>
                 <div class="header-right">
@@ -177,7 +156,6 @@
                             <i class="fas fa-sun"></i>
                         </button>
                         
-                           
                         <div class="header-profile">
                             <div class="profile-avatar">
                                 <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&background=random" alt="{{ Auth::user()->name }}">
@@ -194,10 +172,6 @@
                                         <i class="fas fa-user"></i>
                                         <span>Meu Perfil</span>
                                     </a>
-                                    <!--<a href="#">
-                                        <i class="fas fa-cog"></i>
-                                        <span>Configurações</span>
-                                    </a>-->
                                 </div>
                                 <form method="POST" action="{{ route('logout') }}" class="profile-logout">
                                     @csrf
@@ -221,24 +195,16 @@
                             </div>
                             <div class="card-info">
                                 <h3>Total de Clientes</h3>
-                                <span>1,254</span>
-                                <div class="card-trend up">
-                                    <i class="fas fa-arrow-up"></i>
-                                    <span>12.5%</span>
-                                </div>
+                                <span>{{ $totalCustomers }}</span>
                             </div>
                         </div>
                         <div class="card">
                             <div class="card-icon bg-gradient-green">
-                                <i class="fas fa-shopping-cart"></i>
+                                <i class="fas fa-user-shield"></i>
                             </div>
                             <div class="card-info">
-                                <h3>Pedidos Hoje</h3>
-                                <span>356</span>
-                                <div class="card-trend up">
-                                    <i class="fas fa-arrow-up"></i>
-                                    <span>8.2%</span>
-                                </div>
+                                <h3>Administradores</h3>
+                                <span>{{ $totalAdmins }}</span>
                             </div>
                         </div>
                         <div class="card">
@@ -247,11 +213,7 @@
                             </div>
                             <div class="card-info">
                                 <h3>Receita Total</h3>
-                                <span>R$12,540</span>
-                                <div class="card-trend down">
-                                    <i class="fas fa-arrow-down"></i>
-                                    <span>3.1%</span>
-                                </div>
+                                <span>R$ {{ number_format($totalRevenue, 2, ',', '.') }}</span>
                             </div>
                         </div>
                         <div class="card">
@@ -259,88 +221,69 @@
                                 <i class="fas fa-chart-pie"></i>
                             </div>
                             <div class="card-info">
-                                <h3>Crescimento</h3>
-                                <span>+12.5%</span>
-                                <div class="card-trend up">
-                                    <i class="fas fa-arrow-up"></i>
-                                    <span>4.7%</span>
-                                </div>
+                                <h3>Assinaturas Ativas</h3>
+                                <span>{{ $totalSubscriptions }}</span>
                             </div>
                         </div>
                     </div>
                     
-                    <div class="dashboard-content">
-                        <div class="content-section">
+                    <div class="dashboard-content-full">
+                        <div class="content-section-full">
                             <div class="section-header">
                                 <h2>Atividade Recente</h2>
                                 <div class="section-actions">
-                                    <div class="section-filter">
-                                        <select class="form-select">
-                                            <option>Hoje</option>
-                                            <option>Esta Semana</option>
-                                            <option selected>Este Mês</option>
-                                            <option>Este Ano</option>
-                                        </select>
-                                    </div>
                                     <a href="#" class="btn btn-link">Ver Tudo</a>
                                 </div>
                             </div>
-                            <div class="section-content">
+                            <div class="section-content-full">
                                 <div class="activity-list">
-                                    <div class="activity-item">
-                                        <div class="activity-icon bg-blue">
-                                            <i class="fas fa-shopping-cart"></i>
+                                    <!-- Novos Usuários -->
+                                    @foreach($recentUsers as $user)
+                                        <div class="activity-item">
+                                            <div class="activity-icon bg-green">
+                                                <i class="fas fa-user-plus"></i>
+                                            </div>
+                                            <div class="activity-content">
+                                                <p><strong>Novo usuário registrado</strong> - {{ $user->name }}</p>
+                                                <span class="activity-time">{{ $user->created_at->diffForHumans() }}</span>
+                                            </div>
+                                            <div class="activity-meta">
+                                                <span class="badge bg-light text-dark">{{ $user->email }}</span>
+                                            </div>
                                         </div>
-                                        <div class="activity-content">
-                                            <p><strong>Pedido #1254</strong> foi realizado por <a href="#">João Silva</a></p>
-                                            <span class="activity-time">2 minutos atrás</span>
+                                    @endforeach
+                                    
+                                    <!-- Novas Assinaturas -->
+                                    @foreach($recentSubscriptions as $subscription)
+                                        <div class="activity-item">
+                                            <div class="activity-icon bg-blue">
+                                                <i class="fas fa-shopping-cart"></i>
+                                            </div>
+                                            <div class="activity-content">
+                                                <p><strong>Nova assinatura</strong> - {{ $subscription->user->name ?? 'Usuário desconhecido' }}</p>
+                                                <span class="activity-time">{{ $subscription->created_at->diffForHumans() }}</span>
+                                            </div>
+                                            <div class="activity-meta">
+                                                <span class="badge bg-primary">{{ $subscription->stripe_status }}</span>
+                                            </div>
                                         </div>
-                                        <div class="activity-amount">
-                                            R$ 245,90
+                                    @endforeach
+                                    
+                                    <!-- Pagamentos Recentes -->
+                                    @foreach($recentPayments as $payment)
+                                        <div class="activity-item">
+                                            <div class="activity-icon bg-orange">
+                                                <i class="fas fa-money-bill-wave"></i>
+                                            </div>
+                                            <div class="activity-content">
+                                                <p><strong>Pagamento recebido</strong> - {{ $payment->user->name ?? 'Usuário desconhecido' }}</p>
+                                                <span class="activity-time">{{ $payment->created_at->diffForHumans() }}</span>
+                                            </div>
+                                            <div class="activity-meta">
+                                                <span class="badge bg-success">R$ {{ number_format($payment->amount, 2, ',', '.') }}</span>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="activity-item">
-                                        <div class="activity-icon bg-green">
-                                            <i class="fas fa-user-plus"></i>
-                                        </div>
-                                        <div class="activity-content">
-                                            <p><strong>Novo cliente</strong> <a href="#">Maria Souza</a> se registrou</p>
-                                            <span class="activity-time">1 hora atrás</span>
-                                        </div>
-                                    </div>
-                                    <div class="activity-item">
-                                        <div class="activity-icon bg-orange">
-                                            <i class="fas fa-box"></i>
-                                        </div>
-                                        <div class="activity-content">
-                                            <p><strong>Novo produto</strong> <a href="#">iPhone 13</a> adicionado ao catálogo</p>
-                                            <span class="activity-time">3 horas atrás</span>
-                                        </div>
-                                        <div class="activity-amount">
-                                            15 unidades
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="content-section">
-                            <div class="section-header">
-                                <h2>Visão Geral das Vendas</h2>
-                                <div class="section-actions">
-                                    <div class="section-filter">
-                                        <select class="form-select">
-                                            <option>Diário</option>
-                                            <option selected>Semanal</option>
-                                            <option>Mensal</option>
-                                            <option>Anual</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="section-content">
-                                <div class="chart-container">
-                                    <canvas id="salesChart"></canvas>
+                                    @endforeach
                                 </div>
                             </div>
                         </div>
@@ -350,7 +293,6 @@
         </main>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Toggle Sidebar
@@ -366,21 +308,6 @@
             closeBtn.addEventListener('click', function() {
                 sidebar.classList.add('collapsed');
                 document.querySelector('.main-content').classList.add('expanded');
-            });
-            
-            // Submenu toggle
-            const submenuItems = document.querySelectorAll('.has-submenu > a');
-            submenuItems.forEach(item => {
-                item.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const submenu = this.nextElementSibling;
-                    const parent = this.parentElement;
-                    
-                    parent.classList.toggle('open');
-                    submenu.style.maxHeight = parent.classList.contains('open') 
-                        ? submenu.scrollHeight + 'px' 
-                        : '0';
-                });
             });
             
             // Theme Toggle
@@ -400,48 +327,6 @@
                 document.body.classList.add('dark-mode');
             }
             
-            // Initialize Chart
-            const ctx = document.getElementById('salesChart').getContext('2d');
-            const salesChart = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
-                    datasets: [{
-                        label: 'Vendas 2023',
-                        data: [12000, 19000, 15000, 18000, 22000, 25000, 30000],
-                        backgroundColor: 'rgba(54, 162, 235, 0.1)',
-                        borderColor: 'rgba(54, 162, 235, 1)',
-                        borderWidth: 2,
-                        tension: 0.4,
-                        fill: true
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            position: 'top',
-                        },
-                        tooltip: {
-                            mode: 'index',
-                            intersect: false,
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            ticks: {
-                                callback: function(value) {
-                                    return 'R$ ' + value.toLocaleString();
-                                }
-                            }
-                        }
-                    }
-                }
-            });
-            
-            // Notification dropdown
-            
             // Profile dropdown
             const profileAvatar = document.querySelector('.profile-avatar');
             const profileDropdown = document.querySelector('.profile-dropdown');
@@ -451,9 +336,8 @@
                 profileDropdown.classList.toggle('show');
             });
             
-            // Close dropdowns when clicking outside
+            // Close dropdown when clicking outside
             document.addEventListener('click', function() {
-                notificationDropdown.classList.remove('show');
                 profileDropdown.classList.remove('show');
             });
         });
