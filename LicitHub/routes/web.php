@@ -69,7 +69,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/subscriptions', [SubscriptionController::class, 'index'])->name('subscriptions.index');
     Route::get('/subscriptions/checkout/{plan}', [SubscriptionController::class, 'checkout']) ->name('subscriptions.checkout');    Route::post('/subscriptions/{plan}/process', [SubscriptionController::class, 'process'])->name('subscriptions.process'); // desativado para PIX, só existe para cartão
     Route::get('/subscriptions/success', [SubscriptionController::class, 'success'])->name('subscriptions.success');
-    Route::post('/subscriptions/cancel', [SubscriptionController::class, 'cancel'])->name('subscriptions.cancel');
+    Route::get('/subscriptions/cancel', [SubscriptionController::class, 'cancel'])->name('subscriptions.cancel');
 });
 
 // Rotas específicas para administradores

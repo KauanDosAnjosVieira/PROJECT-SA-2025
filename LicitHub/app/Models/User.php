@@ -6,6 +6,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Cashier\Billable;
 use App\Notifications\CustomResetPassword;
+use Illuminate\Support\Facades\Cache;
 
 class User extends Authenticatable
 {
@@ -72,5 +73,10 @@ class User extends Authenticatable
     {
         $this->notify(new CustomResetPassword($token));
     }
+
+public function isOnline()
+{
+    return Cache::has('user-is-online-' . $this->id);
+}
 }
 

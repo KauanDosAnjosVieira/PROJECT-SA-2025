@@ -163,12 +163,12 @@
                             <span class="menu-text">Planos</span>
                         </a>
                     </li>
-                    <li class="menu-item">
-                        <a href="#">
+                                        <li class="menu-item">
+                        <a href="{{ route('admin.chat') }}">
                             <div class="menu-icon">
-                                <i class="fas fa-chart-line"></i>
+                                <i class="fas fa-comments"></i>
                             </div>
-                            <span class="menu-text">Relatórios</span>
+                            <span class="menu-text">Chat</span>
                         </a>
                     </li>
                 </ul>
@@ -229,10 +229,7 @@
                                         <i class="fas fa-user"></i>
                                         <span>Meu Perfil</span>
                                     </a>
-                                    <a href="#">
-                                        <i class="fas fa-cog"></i>
-                                        <span>Configurações</span>
-                                    </a>
+                                   
                                 </div>
                                 <form method="POST" action="{{ route('logout') }}" class="profile-logout">
                                     @csrf

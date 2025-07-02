@@ -33,6 +33,7 @@ return array(
     'App\\Http\\Controllers\\HomeController' => $baseDir . '/app/Http/Controllers/HomeController.php',
     'App\\Http\\Controllers\\PostController' => $baseDir . '/app/Http/Controllers/PostController.php',
     'App\\Http\\Controllers\\ProfileController' => $baseDir . '/app/Http/Controllers/ProfileController.php',
+    'App\\Http\\Controllers\\ReceiptController' => $baseDir . '/app/Http/Controllers/ReceiptController.php',
     'App\\Http\\Controllers\\StripeWebhookController' => $baseDir . '/app/Http/Controllers/StripeWebhookController.php',
     'App\\Http\\Controllers\\SubscriptionController' => $baseDir . '/app/Http/Controllers/SubscriptionController.php',
     'App\\Http\\Controllers\\WelcomeController' => $baseDir . '/app/Http/Controllers/WelcomeController.php',

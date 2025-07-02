@@ -701,6 +701,7 @@ class ComposerStaticInitef1dc2c03e6030480fb547832ac33dcb
         'App\\Http\\Controllers\\HomeController' => __DIR__ . '/../..' . '/app/Http/Controllers/HomeController.php',
         'App\\Http\\Controllers\\PostController' => __DIR__ . '/../..' . '/app/Http/Controllers/PostController.php',
         'App\\Http\\Controllers\\ProfileController' => __DIR__ . '/../..' . '/app/Http/Controllers/ProfileController.php',
+        'App\\Http\\Controllers\\ReceiptController' => __DIR__ . '/../..' . '/app/Http/Controllers/ReceiptController.php',
         'App\\Http\\Controllers\\StripeWebhookController' => __DIR__ . '/../..' . '/app/Http/Controllers/StripeWebhookController.php',
         'App\\Http\\Controllers\\SubscriptionController' => __DIR__ . '/../..' . '/app/Http/Controllers/SubscriptionController.php',
         'App\\Http\\Controllers\\WelcomeController' => __DIR__ . '/../..' . '/app/Http/Controllers/WelcomeController.php',

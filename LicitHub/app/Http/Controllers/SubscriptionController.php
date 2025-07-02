@@ -32,7 +32,7 @@ class SubscriptionController extends Controller
         // Verifica se o usuário já tem um customer ID no Stripe
         if (!$user->stripe_id) {
             // Cria um novo customer no Stripe se não existir
-            $stripeCustomer = $user->createAsStripeCustomer();
+         $user->createAsStripeCustomer(); // já salva internamente
         }
 
         // Cria a sessão de checkout

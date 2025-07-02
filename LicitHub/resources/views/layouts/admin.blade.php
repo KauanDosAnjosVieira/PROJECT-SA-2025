@@ -17,32 +17,7 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('admin.dashboard') }}">Dashboard</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('clients.index') }}">Clientes</a>
-                    </li>
-                    <li class="nav-item">
-                    <a class="nav-link" href="{{ route('admin.chat') }}">
-                        <i class="fas fa-comments"></i> Chat
-                        @php
-                            $unreadCount = \App\Models\ChatMessage::where('to_user_id', Auth::id())
-                                ->where('is_read', false)
-                                ->count();
-                        @endphp
-                        @if($unreadCount > 0)
-                            <span class="badge bg-danger">{{ $unreadCount }}</span>
-                        @endif
-                    </a>
-                </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('profile.edit') }}">Configurações</a>
-                    </li>
-                </ul>
-                
+
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">

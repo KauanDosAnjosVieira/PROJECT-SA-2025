@@ -79,7 +79,9 @@
                             </div>
                             <span class="menu-text">Dashboard</span>
                         </a>
-                    </li>
+                        
+
+        
                     
                     <li class="menu-title">GERENCIAMENTO</li>
                     <li class="menu-item">
@@ -107,16 +109,16 @@
                         </a>
                     </li>
                     <li class="menu-item">
-                        <a href="#">
+                        <a href="{{ route('admin.chat') }}">
                             <div class="menu-icon">
-                                <i class="fas fa-chart-line"></i>
+                                <i class="fas fa-comments"></i>
                             </div>
-                            <span class="menu-text">Relatórios</span>
+                            <span class="menu-text">Chat</span>
                         </a>
                     </li>
-                </ul>
-            </div>
-            
+
+   
+
             <div class="sidebar-footer">
                 <div class="user-panel">
                     <div class="user-avatar">
@@ -167,11 +169,12 @@
                                         <span>{{ Auth::user()->user_type }}</span>
                                     </div>
                                 </div>
-                                <div class="profile-links">
+                                                               <div class="profile-links">
                                     <a href="{{ route('profile.edit') }}">
                                         <i class="fas fa-user"></i>
                                         <span>Meu Perfil</span>
                                     </a>
+                     
                                 </div>
                                 <form method="POST" action="{{ route('logout') }}" class="profile-logout">
                                     @csrf
@@ -184,7 +187,7 @@
                         </div>
                     </div>
                 </div>
-            </header>
+            </header>   
             
             <div class="content-wrapper">
                 <div class="dashboard-overview">
@@ -207,15 +210,7 @@
                                 <span>{{ $totalAdmins }}</span>
                             </div>
                         </div>
-                        <div class="card">
-                            <div class="card-icon bg-gradient-orange">
-                                <i class="fas fa-dollar-sign"></i>
-                            </div>
-                            <div class="card-info">
-                                <h3>Receita Total</h3>
-                                <span>R$ {{ number_format($totalRevenue, 2, ',', '.') }}</span>
-                            </div>
-                        </div>
+        
                         <div class="card">
                             <div class="card-icon bg-gradient-purple">
                                 <i class="fas fa-chart-pie"></i>

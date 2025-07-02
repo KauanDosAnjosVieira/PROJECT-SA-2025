@@ -100,7 +100,6 @@ session_start();
         <li><a href="#planos">Planos</a></li>
         <li><a href="#licitacoes">Licitações</a></li>
         <li><a href="#testemunhas">Testemunhas</a></li>
-        <li><a href="#contato">Contato</a></li>
      
       </ul>        
     </nav>
