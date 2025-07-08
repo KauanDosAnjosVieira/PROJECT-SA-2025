@@ -147,8 +147,10 @@ session_start();
   <section class="hero" id="home">
     <div class="container">
       <div class="hero-content">
-        <h1>Encontre todas as licitações em um só lugar</h1>
-        <p>Sistema completo para participação em licitações. Encontre licitações e organize sua participação.</p>
+      <h1 class="text-4xl font-bold mb-4">Bem-vindo ao nosso portal</h1>
+    <p class="text-lg text-gray-700 mb-6">
+        Descubra licitações públicas que combinam com o seu negócio.
+    </p>
         <div class="cta-buttons">
           @if(auth()->check())
     <!-- O usuário ESTÁ logado -->
@@ -184,8 +186,10 @@ session_start();
             <img src="icons/lupa.png" alt="Busca Avançada">
           </div>
           <h3>Busca Avançada</h3>
-          <p>Encontre licitações de acordo com seus interesses com filtros personalizados.</p>
-        </div>
+          <p class="text-gray-600">
+                    Encontre licitações por categoria, região, órgão público, modalidade e muito mais, de forma rápida e precisa.
+                </p>
+                      </div>
         
         <div class="advantage-card">
           <div class="advantage-icon">
@@ -210,8 +214,10 @@ session_start();
               <path d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m1.679-4.493-1.335 2.226a.75.75 0 0 1-1.174.144l-.774-.773a.5.5 0 0 1 .708-.708l.547.548 1.17-1.951a.5.5 0 1 1 .858.514M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0M8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4"/>
               <path d="M8.256 14a4.5 4.5 0 0 1-.229-1.004H3c.001-.246.154-.986.832-1.664C4.484 10.68 5.711 10 8 10q.39 0 .74.025c.226-.341.496-.65.804-.918Q8.844 9.002 8 9c-5 0-6 3-6 4s1 1 1 1z"/>
             </svg>          </div>
-          <h3>Dashboard Intuitivo</h3>
-          <p>Interface amigável para gerenciar todas as suas atividades.</p>
+          <h3>Análise De Editais</h3>
+          <p class="text-gray-600">
+                    Tenha uma visão clara dos requisitos e detalhes dos editais para tomar decisões mais rápidas e seguras.
+                </p>
         </div>
       </div>
     </div>
@@ -253,7 +259,7 @@ session_start();
           <div class="step-number">1</div>
           <div class="step-content">
             <h3>Cadastre-se</h3>
-            <p>Crie sua conta gratuitamente em menos de 2 minutos.</p>
+            <p>Crie sua conta em menos de 2 minutos.</p>
           </div>
         </div>
         <div class="step">
