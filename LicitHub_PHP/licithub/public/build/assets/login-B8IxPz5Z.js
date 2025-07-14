@@ -1,1 +1,0 @@
-document.querySelector("form").addEventListener("submit",function(e){const t=document.getElementById("email").value,a=document.getElementById("password").value;if(!t.includes("@"))return e.preventDefault(),alert("Por favor, insira um e-mail válido."),!1;if(a.length<1)return e.preventDefault(),alert("Por favor, insira sua senha."),!1});
